@@ -54,13 +54,14 @@
             // Set initial state
             setStatus('INITIAL');
 
-            finishBtn.addEventListener('click', async function() {
+            async function syncData() {
                 const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
                 const reportData = localStorage.getItem('ocean_report');
                 
                 if (!reportData) {
-                    setStatus('ERROR', 'ARCHIVE STATUS: ERROR - DATA MISSING');
-                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    setStatus('ERROR', 'Error: No survey data found in storage. Please complete the survey first.');
+                    // Keeping the prominent error visible for longer since it's critical
+                    await new Promise(resolve => setTimeout(resolve, 5000));
                     window.location.href = 'index.html';
                     return;
                 }
@@ -84,7 +85,9 @@
                         
                         clearTimeout(timeoutId);
                         setStatus('SUCCESS');
+                        // Stay on screen briefly to show success
                         await new Promise(resolve => setTimeout(resolve, 2000));
+                        window.location.href = 'index.html'; 
                     } catch (fetchError) {
                         if (fetchError.name === 'AbortError') {
                             setStatus('TIMEOUT');
@@ -98,7 +101,12 @@
                     setStatus('ERROR');
                     await new Promise(resolve => setTimeout(resolve, 3000));
                 }
+            }
 
+            // Immediately trigger sync if data exists
+            syncData();
+
+            finishBtn.addEventListener('click', function() {
                 window.location.href = 'index.html'; 
             });
         });
