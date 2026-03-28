@@ -9,71 +9,23 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "background": "#f7fafc",
-              "primary-container": "#9ddbf2",
-              "surface-container-high": "#e2e9ed",
-              "on-primary-fixed-variant": "#0d586c",
-              "on-secondary": "#f1faff",
-              "on-primary": "#f1faff",
-              "surface-dim": "#d2dbe0",
-              "primary": "#24677b",
-              "on-background": "#2b3438",
-              "secondary-container": "#cfe6f1",
-              "error": "#a83836",
-              "tertiary": "#4c5f84",
-              "secondary-fixed": "#cfe6f1",
-              "primary-dim": "#125a6f",
-              "on-secondary-fixed-variant": "#495f68",
-              "tertiary-fixed-dim": "#adc1eb",
-              "tertiary-dim": "#405377",
-              "primary-fixed": "#9ddbf2",
-              "surface-container-lowest": "#ffffff",
-              "surface-container-low": "#eff4f7",
-              "surface": "#f7fafc",
-              "on-primary-container": "#004e61",
-              "tertiary-container": "#bbcffa",
-              "outline": "#737c80",
-              "error-container": "#fa746f",
-              "on-tertiary-container": "#324669",
-              "tertiary-fixed": "#bbcffa",
-              "inverse-on-surface": "#9a9da0",
-              "surface-tint": "#24677b",
-              "error-dim": "#67040d",
-              "surface-container": "#e8eff3",
-              "on-secondary-container": "#3f555e",
-              "secondary-dim": "#41565f",
-              "outline-variant": "#aab3b8",
-              "on-primary-fixed": "#003a48",
-              "on-surface-variant": "#576065",
-              "inverse-primary": "#9ddbf2",
-              "on-tertiary-fixed": "#1e3254",
-              "on-secondary-fixed": "#2d424b",
-              "on-error-container": "#6e0a12",
-              "on-tertiary": "#f8f8ff",
-              "surface-variant": "#dbe4e9",
-              "secondary-fixed-dim": "#c1d8e2",
-              "surface-container-highest": "#dbe4e9",
-              "surface-bright": "#f7fafc",
-              "secondary": "#4d626b",
-              "on-error": "#fff7f6",
-              "on-tertiary-fixed-variant": "#3b4f73",
-              "primary-fixed-dim": "#90cde4",
-              "on-surface": "#2b3438",
-              "inverse-surface": "#0b0f11"
-            },
-            fontFamily: {
-              "headline": ["Manrope"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
+      function completeAnalysis() {
+        // Generate detailed report data reflecting the UI example
+        const reportData = {
+          user_name: "Ethereal Voyager",
+          group_number: 7,
+          ocean_score: { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
+          ocean_profile: ["High O", "High C", "Mid E", "High A", "Low N"],
+          timestamp: new Date().toISOString(),
+          status: 'completed',
+          archive_id: 'ETH-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('ethereal_archive_report', JSON.stringify(reportData));
+        
+        // Redirect to results.html
+        window.location.href = 'results.html';
       }
     </script>
 <style>
@@ -196,8 +148,12 @@
 <div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <script>
       function completeAnalysis() {
-        // Generate dummy report data
+        // Generate detailed report data reflecting the UI example
         const reportData = {
+          user_name: "Ethereal Voyager",
+          group_number: 7,
+          ocean_score: { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
+          ocean_profile: ["High O", "High C", "Mid E", "High A", "Low N"],
           timestamp: new Date().toISOString(),
           status: 'completed',
           archive_id: 'ETH-' + Math.random().toString(36).substr(2, 9).toUpperCase()
