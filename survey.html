@@ -50,7 +50,7 @@
 <div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border-0 space-y-12">
 <div class="space-y-2">
 <span class="text-sm font-medium text-outline" id="question-number">Loading...</span>
-<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">Failed to load archive data. Please try again.</h2>
+<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">Loading archive data...</h2>
 </div>
 <!-- Selection Tiles -->
 <div class="grid grid-cols-1 gap-4" id="options-container">
@@ -108,6 +108,7 @@
             
             try {
                 state.userProfile = JSON.parse(profileStr);
+                console.log('User Profile loaded:', state.userProfile);
             } catch (e) {
                 elements.questionText.innerText = "Error: Failed to parse user profile data.";
                 return;
@@ -117,60 +118,81 @@
 
             const fetchData = async (url) => {
                 const res = await fetch(url);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status} at ${url}`);
                 return res;
             };
 
             let dataRaw, dict;
             try {
                 const [resData, resDict] = await Promise.all([
-                    fetchData('data_sample.jsonl'),
-                    fetchData('dict.json')
+                    fetchData('./data_sample.jsonl'),
+                    fetchData('./dict.json')
                 ]);
                 dataRaw = await resData.text();
                 dict = await resDict.json();
+                
+                console.log('Dictionary loaded:', dict);
             } catch (err) {
-                elements.questionText.innerText = `Fetch Error: ${err.message}`;
+                elements.questionText.innerText = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
                 return;
             }
 
-            // Updated processing logic for JSONL
             let allQuestions;
             try {
-                allQuestions = dataRaw.trim().split('\n').map(line => {
-                    const parsed = JSON.parse(line);
-                    return {
-                        question: parsed.question,
-                        options: parsed.options,
-                        ground_truth: parsed.ground_truth_choice_id
-                    };
-                });
+                allQuestions = dataRaw.trim().split('\n')
+                    .filter(line => line.trim().length > 0)
+                    .map(line => {
+                        const parsed = JSON.parse(line);
+                        return {
+                            question: parsed.question,
+                            options: parsed.options,
+                            ground_truth: parsed.ground_truth_choice_id
+                        };
+                    });
             } catch (err) {
-                elements.questionText.innerText = "Error: The archive data format is invalid.";
+                elements.questionText.innerText = "Error: The archive data format (JSONL) is invalid.";
                 return;
             }
             
             let targetIndices = [];
-            oceanProfile.forEach(traitStr => {
-                const parts = traitStr.split(' ');
-                const level = parts[0].toLowerCase();
-                const trait = parts[1].toUpperCase();
-                
-                if (dict[trait] && dict[trait][level]) {
-                    targetIndices = [...targetIndices, ...dict[trait][level]];
-                }
-            });
+            let missingTraits = [];
+
+            if (oceanProfile && Array.isArray(oceanProfile)) {
+                oceanProfile.forEach(traitStr => {
+                    const parts = traitStr.split(' ');
+                    if (parts.length < 2) return;
+                    
+                    const level = parts[0].toLowerCase();
+                    const trait = parts[1].toUpperCase();
+                    
+                    if (dict[trait]) {
+                        if (dict[trait][level]) {
+                            targetIndices = [...targetIndices, ...dict[trait][level]];
+                        } else {
+                            missingTraits.push(`${trait} (${level})`);
+                        }
+                    } else {
+                        missingTraits.push(trait);
+                    }
+                });
+            }
+
+            if (missingTraits.length > 0) {
+                console.warn('Missing mappings in dict.json for:', missingTraits);
+            }
 
             const uniqueIndices = [...new Set(targetIndices)].sort((a, b) => a - b);
             state.questions = uniqueIndices.map(idx => ({ ...allQuestions[idx], original_index: idx }));
 
             if (state.questions.length === 0) {
+                console.log('No specific matches found. Loading fallback sequence.');
                 state.questions = allQuestions.slice(0, 10).map((q, i) => ({ ...q, original_index: i }));
             }
 
             renderQuestion();
         } catch (err) {
-            elements.questionText.innerText = "An unexpected error occurred. Please try refreshing.";
+            console.error('Initialization error:', err);
+            elements.questionText.innerText = `An unexpected error occurred: ${err.message}`;
         }
     }
 
@@ -191,17 +213,21 @@
         options.forEach((opt, idx) => {
             const isSelected = state.answers[state.currentIndex] === idx;
             const btn = document.createElement('button');
+            
             btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
                 isSelected 
                 ? 'bg-primary-container text-on-primary-container ring-2 ring-primary border-transparent' 
                 : 'bg-surface-container-low hover:bg-primary-container/30 border-transparent hover:border-primary/20'
             }`;
             
+            const iconName = isSelected ? 'check_circle' : 'radio_button_unchecked';
+            const iconColor = isSelected ? 'text-primary' : 'text-outline group-hover:text-primary';
+            const fillSetting = isSelected ? "'FILL' 1" : "'FILL' 0";
+
             btn.innerHTML = `
                 <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
-                <span class="material-symbols-outlined ${isSelected ? 'text-primary' : 'text-outline group-hover:text-primary'}" 
-                      style="${isSelected ? "font-variation-settings: 'FILL' 1;" : ""}">
-                    ${isSelected ? 'check_circle' : 'radio_button_unchecked'}
+                <span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
+                    ${iconName}
                 </span>
             `;
 
