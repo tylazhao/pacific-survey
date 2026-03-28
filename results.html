@@ -133,12 +133,12 @@
          * 1. Deploy a Google Apps Script as a Web App.
          * 2. Paste the provided Web App URL below.
          */
-        const GOOGLE_SHEETS_WEB_APP_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
+        const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
         
         // Retrieve data from localStorage (saved from previous survey steps)
         const reportData = localStorage.getItem('ocean_report');
         
-        if (GOOGLE_SHEETS_WEB_APP_URL && GOOGLE_SHEETS_WEB_APP_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' && reportData) {
+        if (GOOGLE_SHEETS_WEB_APP_URL && GOOGLE_SHEETS_WEB_APP_URL !== 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec' && reportData) {
             try {
                 console.log('Attempting to sync data with Google Sheets...');
                 await fetch(GOOGLE_SHEETS_WEB_APP_URL, {

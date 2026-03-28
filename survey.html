@@ -29,60 +29,42 @@
 <!-- TopAppBar -->
 <header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
 <nav class="flex justify-center items-center w-full px-8 py-6">
-<div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope">
-            The Ethereal Archive
+<div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope" style="">
+            PACIFIC
         </div>
 </nav>
 </header>
 <!-- Progress Monolith -->
 <div class="fixed top-0 left-0 w-full h-2 bg-surface-variant z-[60]">
-<div class="h-full bg-primary transition-all duration-500 ease-out" id="progress-bar" style="width: 100%;"></div>
+<div class="h-full bg-primary transition-all duration-500 ease-out" id="progress-bar" style="width: 0%;"></div>
 </div>
 <!-- Main Content Canvas -->
 <main class="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto w-full">
 <div class="space-y-20" id="survey-container">
 <!-- Question Header Section -->
 <section class="space-y-4">
-<span class="text-primary font-semibold tracking-widest uppercase text-xs">Section 04 / Insight Analysis</span>
-<h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-on-surface leading-tight">
-                Reflecting on <span class="text-primary-dim">Behavioral Patterns</span>.
-            </h1>
-<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
-                Choose the option that most naturally aligns with your immediate reaction. There are no incorrect interpretations within the archive.
-            </p>
+<span class="text-primary font-semibold tracking-widest uppercase text-xs" id="section-label" style="">Question 1/25</span>
+<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed" style="">Choose the best option that aligns with your preference based on the question below, or select skip if you feel none of them match.</p>
 </section>
 <!-- Survey Question Card -->
 <div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border-0 space-y-12">
 <div class="space-y-2">
-<span class="text-sm font-medium text-outline" id="question-number">Question 30 of 30</span>
-<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">
-                    In a complex social environment, do you prioritize individual harmony or collective efficiency?
-                </h2>
+<span class="text-sm font-medium text-outline" id="question-number" style="">Loading...</span>
+<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text" style="">Failed to load archive data. Please try again.</h2>
 </div>
 <!-- Selection Tiles -->
 <div class="grid grid-cols-1 gap-4" id="options-container">
-<button class="group flex items-center justify-between p-6 bg-surface-container-low hover:bg-primary-container/30 transition-all duration-300 rounded-xl text-left border border-transparent hover:border-primary/20">
-<span class="text-lg font-medium text-on-surface">I prioritize individual emotional well-being and harmony.</span>
-<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">radio_button_unchecked</span>
-</button>
-<button class="group flex items-center justify-between p-6 bg-primary-container text-on-primary-container transition-all duration-300 rounded-xl text-left ring-2 ring-primary ring-inset">
-<span class="text-lg font-medium">I prioritize the efficiency and goals of the collective group.</span>
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</button>
-<button class="group flex items-center justify-between p-6 bg-surface-container-low hover:bg-primary-container/30 transition-all duration-300 rounded-xl text-left border border-transparent hover:border-primary/20">
-<span class="text-lg font-medium text-on-surface">I seek a balance depending on the specific context provided.</span>
-<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">radio_button_unchecked</span>
-</button>
+<!-- Dynamic Options Inject Here -->
 </div>
 <!-- Action Bar -->
 <div class="flex items-center justify-between pt-8">
-<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium">
-<span class="material-symbols-outlined">arrow_back</span>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" onclick="handlePrev()" style="">
+<span class="material-symbols-outlined" style="">arrow_back</span>
                     Previous
                 </button>
-<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95" onclick="completeAnalysis()">
-                    Complete Analysis
-                </button>
+<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="next-btn" onclick="handleNext()" style="">
+<span class="" id="next-btn-text" style="">Continue to Next</span>
+</button>
 </div>
 </div>
 </div>
@@ -90,37 +72,181 @@
 <!-- Footer -->
 <footer class="w-full py-12 border-t border-slate-200/20 dark:border-slate-800/20 bg-slate-100 dark:bg-slate-900 mt-auto">
 <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-8 gap-4">
-<div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope">The Ethereal Archive</div>
+<div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope" style="">PACIFIC</div>
 </div>
 </footer>
 <!-- Decorative Elements -->
 <div class="fixed top-1/4 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <script>
-    function completeAnalysis() {
-        // Generate detailed report data
-        const reportData = {
-            user_name: "Ethereal Voyager",
-            group_number: 7,
-            ocean_score: { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
-            ocean_profile: ["High O", "High C", "Mid E", "High A", "Low N"],
+    const state = {
+        questions: [],
+        currentIndex: 0,
+        answers: {}, // Key: q_index, value: selected_index
+        userProfile: null,
+        resultsPage: 'results.html'
+    };
+
+    const elements = {
+        progressBar: document.getElementById('progress-bar'),
+        sectionLabel: document.getElementById('section-label'),
+        questionNumber: document.getElementById('question-number'),
+        questionText: document.getElementById('question-text'),
+        optionsContainer: document.getElementById('options-container'),
+        prevBtn: document.getElementById('prev-btn'),
+        nextBtn: document.getElementById('next-btn'),
+        nextBtnText: document.getElementById('next-btn-text')
+    };
+
+    async function init() {
+        try {
+            // 1. Fetch data
+            const [dataRaw, dict] = await Promise.all([
+                fetch('data_sample.jsonl').then(res => res.text()),
+                fetch('dict.json').then(res => res.json())
+            ]);
+
+            const allQuestions = dataRaw.trim().split('\n').map(line => JSON.parse(line));
+            
+            // 2. Retrieve userProfile
+            const profileStr = localStorage.getItem('userProfile');
+            if (!profileStr) {
+                console.error("No userProfile found");
+                elements.questionText.innerText = "Error: User profile missing. Please restart the analysis.";
+                return;
+            }
+            state.userProfile = JSON.parse(profileStr);
+            const { oceanProfile } = state.userProfile;
+
+            // 3. Find question indices based on oceanProfile (dictionary trait logic)
+            let targetIndices = [];
+            // oceanProfile example: ["High O", "Low C", ...]
+            oceanProfile.forEach(traitStr => {
+                const parts = traitStr.split(' ');
+                const level = parts[0].toLowerCase();
+                const trait = parts[1].toUpperCase();
+                
+                if (dict[trait] && dict[trait][level]) {
+                    targetIndices = [...targetIndices, ...dict[trait][level]];
+                }
+            });
+
+            // Unique and sorted
+            const uniqueIndices = [...new Set(targetIndices)].sort((a, b) => a - b);
+            
+            // 4. Load specific questions
+            state.questions = uniqueIndices.map(idx => ({ ...allQuestions[idx], original_index: idx }));
+
+            if (state.questions.length === 0) {
+                // Fallback if nothing matched
+                state.questions = allQuestions.slice(0, 10).map((q, i) => ({ ...q, original_index: i }));
+            }
+
+            renderQuestion();
+        } catch (err) {
+            console.error("Initialization failed:", err);
+            elements.questionText.innerText = "Failed to load archive data. Please try again.";
+        }
+    }
+
+    function renderQuestion() {
+        const q = state.questions[state.currentIndex];
+        if (!q) return;
+
+        // 5. Render dynamic question counter in section header
+        elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
+        elements.questionNumber.innerText = `Insight ${state.currentIndex + 1}`;
+        elements.questionText.innerText = q.question || q.text;
+
+        const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
+        elements.progressBar.style.width = `${progress}%`;
+
+        elements.optionsContainer.innerHTML = '';
+        
+        // Render options (no default selection)
+        const options = q.options || ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
+        
+        options.forEach((opt, idx) => {
+            const isSelected = state.answers[state.currentIndex] === idx;
+            
+            const btn = document.createElement('button');
+            btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
+                isSelected 
+                ? 'bg-primary-container text-on-primary-container ring-2 ring-primary border-transparent' 
+                : 'bg-surface-container-low hover:bg-primary-container/30 border-transparent hover:border-primary/20'
+            }`;
+            
+            btn.innerHTML = `
+                <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
+                <span class="material-symbols-outlined ${isSelected ? 'text-primary' : 'text-outline group-hover:text-primary'}" 
+                      style="${isSelected ? "font-variation-settings: 'FILL' 1;" : ""}">
+                    ${isSelected ? 'check_circle' : 'radio_button_unchecked'}
+                </span>
+            `;
+
+            btn.onclick = () => {
+                state.answers[state.currentIndex] = idx;
+                renderQuestion(); 
+            };
+
+            elements.optionsContainer.appendChild(btn);
+        });
+
+        // UI Updates
+        elements.prevBtn.disabled = state.currentIndex === 0;
+        elements.nextBtn.disabled = state.answers[state.currentIndex] === undefined;
+        
+        if (state.currentIndex === state.questions.length - 1) {
+            elements.nextBtnText.innerText = "Complete Analysis";
+        } else {
+            elements.nextBtnText.innerText = "Continue to Next";
+        }
+    }
+
+    function handleNext() {
+        if (state.currentIndex === state.questions.length - 1) {
+            saveAndRedirect();
+        } else {
+            state.currentIndex++;
+            renderQuestion();
+        }
+    }
+
+    function handlePrev() {
+        if (state.currentIndex > 0) {
+            state.currentIndex--;
+            renderQuestion();
+        }
+    }
+
+    function saveAndRedirect() {
+        // Capture all responses into final report
+        const responses = state.questions.map((q, idx) => ({
+            question_index: q.original_index,
+            question_text: q.question || q.text,
+            options_text: q.options || ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+            selected_option: state.answers[idx],
+            ground_truth: q.ground_truth !== undefined ? q.ground_truth : null
+        }));
+
+        const finalReport = {
+            user_name: state.userProfile.name || "Ethereal Voyager",
+            group_number: state.userProfile.groupNumber || 1,
+            ocean_score: state.userProfile.oceanScores,
+            ocean_profile: state.userProfile.oceanProfile,
             timestamp: new Date().toISOString(),
             status: 'completed',
-            archive_id: 'ETH-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-            responses: [
-                { q: 1, text: "Openness to Experience", value: 82 },
-                { q: 2, text: "Conscientiousness", value: 65 },
-                { q: 3, text: "Extraversion", value: 45 },
-                { q: 4, text: "Agreeableness", value: 91 },
-                { q: 5, text: "Emotional Stability", value: 70 }
-            ]
+            responses: responses
         };
-        
+
         // Save to localStorage
-        localStorage.setItem('ethereal_archive_report', JSON.stringify(reportData));
+        localStorage.setItem('ethereal_archive_report', JSON.stringify(finalReport));
+        // Also save as 'ocean_report' for backwards compatibility with some results screens
+        localStorage.setItem('ocean_report', JSON.stringify(finalReport));
         
-        // Redirect to results.html - handles GitHub Pages and other static hosts perfectly
-        window.location.href = "results.html";
+        window.location.href = state.resultsPage;
     }
+
+    init();
 </script>
 </body></html>
