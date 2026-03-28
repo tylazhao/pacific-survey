@@ -55,7 +55,7 @@
             setStatus('INITIAL');
 
             async function syncData() {
-                const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
+                const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbybHTPFKXZVqx88xzsxxAPvjynOhDJAUQ1gG8YTr9Q3JhRaDmhcSFcEck0hB3XTryOG/exec';
                 const reportData = localStorage.getItem('ocean_report');
                 
                 if (!reportData) {
@@ -74,7 +74,7 @@
                             method: 'POST',
                             mode: 'no-cors',
                             headers: {
-                                'Content-Type': 'application/json',
+                                'Content-Type': 'text/plain;charset=utf-8',
                             },
                             body: reportData,
                             signal: controller.signal
