@@ -4,82 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>The Ethereal Archive | Insight Collection</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-      .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-      }
-      .glass-effect {
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-      }
-      body {
-        font-family: 'Inter', sans-serif;
-        background-color: #f7fafc;
-        color: #2b3438;
-      }
-      h1, h2, h3 {
-        font-family: 'Manrope', sans-serif;
-      }
-    </style>
-</head>
-<body class="bg-surface text-on-surface min-h-screen flex flex-col">
-<!-- TopAppBar -->
-<header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
-<nav class="flex justify-center items-center w-full px-8 py-6">
-<div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope">
-            PACIFIC
-        </div>
-</nav>
-</header>
-<!-- Progress Monolith -->
-<div class="fixed top-0 left-0 w-full h-2 bg-surface-variant z-[60]">
-<div class="h-full bg-primary transition-all duration-500 ease-out" id="progress-bar" style="width: 0%;"></div>
-</div>
-<!-- Main Content Canvas -->
-<main class="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto w-full">
-<div class="space-y-20" id="survey-container">
-<!-- Question Header Section -->
-<section class="space-y-4">
-<span class="text-primary font-semibold tracking-widest uppercase text-xs" id="section-label">Question 1/25</span>
-<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">Choose the best option that aligns with your preference based on the question below, or select skip if you feel none of them match.</p>
-</section>
-<!-- Survey Question Card -->
-<div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border-0 space-y-12">
-<div class="space-y-2">
-<span class="text-sm font-medium text-outline" id="question-number">Loading...</span>
-<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">Loading archive data...</h2>
-</div>
-<!-- Selection Tiles -->
-<div class="grid grid-cols-1 gap-4" id="options-container">
-<!-- Dynamic Options Inject Here -->
-</div>
-<!-- Action Bar -->
-<div class="flex items-center justify-between pt-8">
-<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" onclick="handlePrev()">
-<span class="material-symbols-outlined">arrow_back</span>
-                    Previous
-                </button>
-<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="next-btn" onclick="handleNext()">
-<span id="next-btn-text">Continue to Next</span>
-</button>
-</div>
-</div>
-</div>
-</main>
-<!-- Footer -->
-<footer class="w-full py-12 border-t border-slate-200/20 dark:border-slate-800/20 bg-slate-100 dark:bg-slate-900 mt-auto">
-<div class="max-w-7xl mx-auto px-8">
-<div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope">PACIFIC</div>
-</div>
-</footer>
-<!-- Decorative Elements -->
-<div class="fixed top-1/4 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-<div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-<script>
-    const state = {
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">const state = {
         questions: [],
         currentIndex: 0,
         answers: {},
@@ -219,7 +144,7 @@
 
             btn.innerHTML = `
                 <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
-                <span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
+<span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
                     ${iconName}
                 </span>
             `;
@@ -276,17 +201,290 @@
             responses: responses
         };
 
-        // 1. Create the ocean_report following required structure (already done above)
-        // 2. Save to localStorage using key 'ocean_report'
         localStorage.setItem('ocean_report', JSON.stringify(finalReport));
         
-        // 3. Debugging helpers
         console.log('Analysis completed. Saving final report to local storage:', finalReport);
-        alert('Data saved to storage');
 
         window.location.href = state.resultsPage;
     }
 
-    init();
-</script>
+    init();</script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f7fafc;
+        color: #2b3438;
+      }
+      h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
+<nav class="flex justify-center items-center w-full px-8 py-6">
+<div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope">
+            PACIFIC
+        </div>
+</nav>
+</header>
+<!-- Progress Monolith -->
+<div class="fixed top-0 left-0 w-full h-2 bg-surface-variant z-[60]">
+<div class="h-full bg-primary transition-all duration-500 ease-out" id="progress-bar" style="width: 0%;"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto w-full">
+<div class="space-y-20" id="survey-container">
+<!-- Question Header Section -->
+<section class="space-y-4">
+<span class="text-primary font-semibold tracking-widest uppercase text-xs" id="section-label">Question 1/25</span>
+<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">Choose the best option that aligns with your preference based on the question below, or select skip if you feel none of them match.</p>
+</section>
+<!-- Survey Question Card -->
+<div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border-0 space-y-12">
+<div class="space-y-2">
+<span class="text-sm font-medium text-outline" id="question-number">Loading...</span>
+<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">Loading archive data...</h2>
+</div>
+<!-- Selection Tiles -->
+<div class="grid grid-cols-1 gap-4" id="options-container">
+<!-- Dynamic Options Inject Here -->
+</div>
+<!-- Action Bar -->
+<div class="flex items-center justify-between pt-8">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" onclick="handlePrev()">
+<span class="material-symbols-outlined">arrow_back</span>
+                    Previous
+                </button>
+<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="next-btn" onclick="handleNext()">
+<span id="next-btn-text">Continue to Next</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 border-t border-slate-200/20 dark:border-slate-800/20 bg-slate-100 dark:bg-slate-900 mt-auto">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope">PACIFIC</div>
+</div>
+</footer>
+<!-- Decorative Elements -->
+<div class="fixed top-1/4 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+<div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+<script>const state = {
+        questions: [],
+        currentIndex: 0,
+        answers: {},
+        userProfile: null,
+        resultsPage: 'results.html'
+    };
+
+    const elements = {
+        progressBar: document.getElementById('progress-bar'),
+        sectionLabel: document.getElementById('section-label'),
+        questionNumber: document.getElementById('question-number'),
+        questionText: document.getElementById('question-text'),
+        optionsContainer: document.getElementById('options-container'),
+        prevBtn: document.getElementById('prev-btn'),
+        nextBtn: document.getElementById('next-btn'),
+        nextBtnText: document.getElementById('next-btn-text')
+    };
+
+    async function init() {
+        try {
+            const profileStr = localStorage.getItem('userProfile');
+            
+            if (!profileStr) {
+                const errorMsg = "Error: User profile missing from storage. Please restart the analysis.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg);
+                return;
+            }
+            
+            try {
+                state.userProfile = JSON.parse(profileStr);
+            } catch (e) {
+                const errorMsg = "Error: Failed to parse user profile data.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg, e);
+                return;
+            }
+
+            const { oceanProfile } = state.userProfile;
+            if (!oceanProfile) {
+                const errorMsg = "Error: Ocean profile traits are missing from your user data.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg);
+                return;
+            }
+
+            const fetchData = async (url) => {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP ${res.status} at ${url}`);
+                return res;
+            };
+
+            let dataRaw, dict;
+            try {
+                const [resData, resDict] = await Promise.all([
+                    fetchData('./data_sample.jsonl'),
+                    fetchData('./dict.json')
+                ]);
+                dataRaw = await resData.text();
+                dict = await resDict.json();
+            } catch (err) {
+                const errorMsg = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg);
+                return;
+            }
+
+            let allQuestions;
+            try {
+                allQuestions = dataRaw.trim().split('\n')
+                    .filter(line => line.trim().length > 0)
+                    .map(line => JSON.parse(line));
+            } catch (err) {
+                const errorMsg = "Error: The archive data format (JSONL) is invalid.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg, err);
+                return;
+            }
+            
+            let targetIndices = [];
+            const traits = ['O', 'C', 'E', 'A', 'N'];
+
+            traits.forEach(traitKey => {
+                const label = oceanProfile[traitKey];
+                if (label && dict[traitKey] && dict[traitKey][label]) {
+                    const traitIndices = dict[traitKey][label];
+                    targetIndices = [...targetIndices, ...traitIndices];
+                }
+            });
+
+            state.questions = targetIndices.map(idx => {
+                const q = allQuestions[idx];
+                return { 
+                    ...q, 
+                    original_index: idx 
+                };
+            });
+
+            if (state.questions.length === 0) {
+                state.questions = allQuestions.slice(0, 25).map((q, i) => ({ ...q, original_index: i }));
+            }
+
+            renderQuestion();
+        } catch (err) {
+            console.error('Initialization error:', err);
+            elements.questionText.innerText = `An unexpected error occurred: ${err.message}`;
+        }
+    }
+
+    function renderQuestion() {
+        const q = state.questions[state.currentIndex];
+        if (!q) return;
+
+        elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
+        elements.questionNumber.innerText = `(Q ${q.original_index})`;
+        elements.questionText.innerText = q.question;
+
+        const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
+        elements.progressBar.style.width = `${progress}%`;
+
+        elements.optionsContainer.innerHTML = '';
+        const options = q.options || ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"];
+        
+        options.forEach((opt, idx) => {
+            const isSelected = state.answers[state.currentIndex] === idx;
+            const btn = document.createElement('button');
+            
+            btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
+                isSelected 
+                ? 'bg-primary-container text-on-primary-container ring-2 ring-primary border-transparent' 
+                : 'bg-surface-container-low hover:bg-primary-container/30 border-transparent hover:border-primary/20'
+            }`;
+            
+            const iconName = isSelected ? 'check_circle' : 'radio_button_unchecked';
+            const iconColor = isSelected ? 'text-primary' : 'text-outline group-hover:text-primary';
+            const fillSetting = isSelected ? "'FILL' 1" : "'FILL' 0";
+
+            btn.innerHTML = `
+                <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
+<span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
+                    ${iconName}
+                </span>
+            `;
+
+            btn.onclick = () => {
+                state.answers[state.currentIndex] = idx;
+                renderQuestion(); 
+            };
+            elements.optionsContainer.appendChild(btn);
+        });
+
+        elements.prevBtn.disabled = state.currentIndex === 0;
+        elements.nextBtn.disabled = state.answers[state.currentIndex] === undefined;
+        
+        if (state.currentIndex === state.questions.length - 1) {
+            elements.nextBtnText.innerText = "Complete Analysis";
+        } else {
+            elements.nextBtnText.innerText = "Continue to Next";
+        }
+    }
+
+    function handleNext() {
+        if (state.currentIndex === state.questions.length - 1) {
+            saveAndRedirect();
+        } else {
+            state.currentIndex++;
+            renderQuestion();
+        }
+    }
+
+    function handlePrev() {
+        if (state.currentIndex > 0) {
+            state.currentIndex--;
+            renderQuestion();
+        }
+    }
+
+    function saveAndRedirect() {
+        const responses = state.questions.map((q, idx) => ({
+            question_index: q.original_index,
+            question_text: q.question,
+            options_text: q.options || ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
+            selected_option: state.answers[idx],
+            ground_truth: q.ground_truth_choice_id !== undefined ? q.ground_truth_choice_id : null
+        }));
+
+        const finalReport = {
+            user_name: state.userProfile.name || "Ethereal Voyager",
+            group_number: state.userProfile.group || 1,
+            ocean_score: state.userProfile.oceanScores,
+            ocean_profile: state.userProfile.oceanProfile,
+            timestamp: new Date().toISOString(),
+            status: 'completed',
+            responses: responses
+        };
+
+        localStorage.setItem('ocean_report', JSON.stringify(finalReport));
+        
+        console.log('Analysis completed. Saving final report to local storage:', finalReport);
+
+        window.location.href = state.resultsPage;
+    }
+
+    init();</script>
 </body></html>
