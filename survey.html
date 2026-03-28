@@ -185,8 +185,6 @@
     function saveAndRedirect() {
         const responses = state.questions.map((q, idx) => ({
             question_index: q.original_index,
-            question_text: q.question,
-            options_text: q.options || ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
             selected_option: state.answers[idx],
             ground_truth: q.ground_truth_choice_id !== undefined ? q.ground_truth_choice_id : null
         }));
@@ -463,8 +461,6 @@
     function saveAndRedirect() {
         const responses = state.questions.map((q, idx) => ({
             question_index: q.original_index,
-            question_text: q.question,
-            options_text: q.options || ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
             selected_option: state.answers[idx],
             ground_truth: q.ground_truth_choice_id !== undefined ? q.ground_truth_choice_id : null
         }));
