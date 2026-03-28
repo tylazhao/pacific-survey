@@ -4,7 +4,88 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PACIFIC | User Information &amp; OCEAN Assessment</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        const form = document.getElementById('profileForm');
+        const errorMessage = document.getElementById('errorMessage');
+        let isValid = true;
+
+        // Reset previous errors
+        form.querySelectorAll('input').forEach(input => {
+            input.classList.remove('ring-2', 'ring-error');
+        });
+
+        // Validate Full Name
+        const nameInput = document.getElementById('fullName');
+        if (!nameInput.value.trim()) {
+            isValid = false;
+            nameInput.classList.add('ring-2', 'ring-error');
+        }
+
+        // Validate Group Number (0-10)
+        const groupInput = document.getElementById('groupNumber');
+        const groupVal = parseInt(groupInput.value);
+        if (isNaN(groupVal) || groupVal < 0 || groupVal > 10 || !Number.isInteger(groupVal)) {
+            isValid = false;
+            groupInput.classList.add('ring-2', 'ring-error');
+        }
+
+        // Validate OCEAN scores (0-100)
+        const oceanIds = ['scoreO', 'scoreC', 'scoreE', 'scoreA', 'scoreN'];
+        oceanIds.forEach(id => {
+            const input = document.getElementById(id);
+            const val = parseFloat(input.value);
+            if (isNaN(val) || val < 0 || val > 100) {
+                isValid = false;
+                input.classList.add('ring-2', 'ring-error');
+            }
+        });
+
+        if (!isValid) {
+            errorMessage.classList.remove('hidden');
+            window.scrollTo({ top: errorMessage.offsetTop - 200, behavior: 'smooth' });
+            return;
+        }
+
+        errorMessage.classList.add('hidden');
+
+        const getLevel = (score) => (parseInt(score) < 50 ? 'low' : 'high');
+
+        const oceanScoresData = {
+            O: parseInt(document.getElementById('scoreO').value),
+            C: parseInt(document.getElementById('scoreC').value),
+            E: parseInt(document.getElementById('scoreE').value),
+            A: parseInt(document.getElementById('scoreA').value),
+            N: parseInt(document.getElementById('scoreN').value)
+        };
+
+        const oceanProfileData = {
+            O: getLevel(oceanScoresData.O),
+            C: getLevel(oceanScoresData.C),
+            E: getLevel(oceanScoresData.E),
+            A: getLevel(oceanScoresData.A),
+            N: getLevel(oceanScoresData.N)
+        };
+
+        const userProfile = {
+            name: document.getElementById('fullName').value,
+            group: parseInt(document.getElementById('groupNumber').value),
+            age: document.getElementById('age').value || null,
+            gender: document.getElementById('gender').value || 'Not Specified',
+            oceanScores: oceanScoresData,
+            oceanProfile: oceanProfileData
+        };
+
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        
+        localStorage.setItem('user_ocean_profile', JSON.stringify({ 
+            trait: 'Extraversion', 
+            level: oceanProfileData.E === 'low' ? 'Low' : 'High' 
+        }));
+
+        window.location.href = "survey.html";
+    });
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -113,7 +194,7 @@
 <div class="md:w-2/3 space-y-8 bg-surface-container-low p-8 rounded-xl ghost-border">
 <div class="flex flex-col gap-2">
 <label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant" style="">Full Name *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface placeholder-outline-variant ring-2 ring-error" id="fullName" placeholder="Entry Label" required="" type="text"/>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface placeholder-outline-variant" id="fullName" placeholder="Entry Label" required="" type="text"/>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="flex flex-col gap-2">
@@ -133,7 +214,7 @@
 </div>
 <div class="flex flex-col gap-2">
 <label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant" style="">Group Number * (0-10)</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface ring-2 ring-error" id="groupNumber" max="10" min="0" placeholder="Numerical Identifier" required="" type="number"/>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface" id="groupNumber" max="10" min="0" placeholder="Numerical Identifier" required="" type="number"/>
 </div>
 </div>
 </div>
@@ -159,27 +240,27 @@
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
 <span class="text-3xl font-black text-primary/20 font-manrope" style="">O</span>
 <label class="text-sm font-bold text-on-surface" style="">Openness *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Openness" id="scoreO" max="100" min="0" required="" type="number"/>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Openness" id="scoreO" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
 <span class="text-3xl font-black text-primary/20 font-manrope" style="">C</span>
 <label class="text-sm font-bold text-on-surface" style="">Conscientious *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Conscientious" id="scoreC" max="100" min="0" required="" type="number"/>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Conscientious" id="scoreC" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
 <span class="text-3xl font-black text-primary/20 font-manrope" style="">E</span>
 <label class="text-sm font-bold text-on-surface" style="">Extraversion *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Extraversion" id="scoreE" max="100" min="0" required="" type="number"/>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Extraversion" id="scoreE" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
 <span class="text-3xl font-black text-primary/20 font-manrope" style="">A</span>
 <label class="text-sm font-bold text-on-surface" style="">Agreeable *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Agreeable" id="scoreA" max="100" min="0" required="" type="number"/>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Agreeable" id="scoreA" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
 <span class="text-3xl font-black text-primary/20 font-manrope" style="">N</span>
 <label class="text-sm font-bold text-on-surface" style="">Neuroticism *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Neuroticism" id="scoreN" max="100" min="0" required="" type="number"/>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Neuroticism" id="scoreN" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-low rounded-xl flex items-center justify-center p-8 opacity-40">
 <span class="material-symbols-outlined text-4xl" data-icon="psychology_alt" style="">psychology_alt</span>
@@ -188,7 +269,7 @@
 </div>
 </section>
 <div class="pt-12 flex flex-col items-end gap-4">
-<p class="text-error font-medium text-sm" id="errorMessage" style="">Please fill in all required fields and ensure values are within valid ranges.</p>
+<p class="text-error font-medium text-sm hidden" id="errorMessage" style="">Please fill in all required fields and ensure values are within valid ranges.</p>
 <button class="group flex items-center gap-4 bg-primary text-on-primary px-10 py-5 rounded-xl font-bold tracking-widest uppercase text-sm hover:opacity-90 transition-all shadow-lg shadow-primary/10" id="submitBtn" style="" type="button">SURVEY <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span></button>
 </div>
 </form>
@@ -201,22 +282,22 @@
 <script>
     document.getElementById('submitBtn').addEventListener('click', function() {
         const form = document.getElementById('profileForm');
-        const requiredInputs = form.querySelectorAll('[required]');
         const errorMessage = document.getElementById('errorMessage');
         let isValid = true;
 
         // Reset previous errors
-        form.querySelectorAll('input').forEach(input => input.classList.remove('ring-2', 'ring-error'));
-
-        // Check required fields
-        requiredInputs.forEach(input => {
-            if (!input.value.trim()) {
-                isValid = false;
-                input.classList.add('ring-2', 'ring-error');
-            }
+        form.querySelectorAll('input').forEach(input => {
+            input.classList.remove('ring-2', 'ring-error');
         });
 
-        // Strict Validation: Group Number (0-10)
+        // Validate Full Name
+        const nameInput = document.getElementById('fullName');
+        if (!nameInput.value.trim()) {
+            isValid = false;
+            nameInput.classList.add('ring-2', 'ring-error');
+        }
+
+        // Validate Group Number (0-10)
         const groupInput = document.getElementById('groupNumber');
         const groupVal = parseInt(groupInput.value);
         if (isNaN(groupVal) || groupVal < 0 || groupVal > 10 || !Number.isInteger(groupVal)) {
@@ -224,9 +305,9 @@
             groupInput.classList.add('ring-2', 'ring-error');
         }
 
-        // Strict Validation: OCEAN scores (0-100)
-        const oceanInputs = ['scoreO', 'scoreC', 'scoreE', 'scoreA', 'scoreN'];
-        oceanInputs.forEach(id => {
+        // Validate OCEAN scores (0-100)
+        const oceanIds = ['scoreO', 'scoreC', 'scoreE', 'scoreA', 'scoreN'];
+        oceanIds.forEach(id => {
             const input = document.getElementById(id);
             const val = parseFloat(input.value);
             if (isNaN(val) || val < 0 || val > 100) {
@@ -270,10 +351,8 @@
             oceanProfile: oceanProfileData
         };
 
-        // Store primary data
         localStorage.setItem('userProfile', JSON.stringify(userProfile));
         
-        // Compatibility store for survey page logic
         localStorage.setItem('user_ocean_profile', JSON.stringify({ 
             trait: 'Extraversion', 
             level: oceanProfileData.E === 'low' ? 'Low' : 'High' 
