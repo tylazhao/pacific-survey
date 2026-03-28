@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Welcome to PACIFIC</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&amp;family=Manrope:wght@200;400;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed-dim": "#90cde4",
+              "inverse-surface": "#0b0f11",
+              "on-surface": "#2b3438",
+              "surface-container-highest": "#dbe4e9",
+              "secondary-fixed-dim": "#c1d8e2",
+              "on-tertiary-fixed-variant": "#3b4f73",
+              "on-error": "#fff7f6",
+              "surface-bright": "#f7fafc",
+              "secondary": "#4d626b",
+              "on-surface-variant": "#576065",
+              "inverse-primary": "#9ddbf2",
+              "on-primary-fixed": "#003a48",
+              "surface-variant": "#dbe4e9",
+              "on-error-container": "#6e0a12",
+              "on-tertiary": "#f8f8ff",
+              "on-tertiary-fixed": "#1e3254",
+              "on-secondary-fixed": "#2d424b",
+              "surface-container": "#e8eff3",
+              "surface-tint": "#24677b",
+              "error-dim": "#67040d",
+              "inverse-on-surface": "#9a9da0",
+              "tertiary-fixed": "#bbcffa",
+              "secondary-dim": "#41565f",
+              "outline-variant": "#aab3b8",
+              "on-secondary-container": "#3f555e",
+              "tertiary-container": "#bbcffa",
+              "surface": "#f7fafc",
+              "on-primary-container": "#004e61",
+              "on-tertiary-container": "#324669",
+              "outline": "#737c80",
+              "error-container": "#fa746f",
+              "secondary-fixed": "#cfe6f1",
+              "surface-container-low": "#eff4f7",
+              "primary-fixed": "#9ddbf2",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed-dim": "#adc1eb",
+              "tertiary-dim": "#405377",
+              "primary-dim": "#125a6f",
+              "on-secondary-fixed-variant": "#495f68",
+              "tertiary": "#4c5f84",
+              "error": "#a83836",
+              "on-background": "#2b3438",
+              "secondary-container": "#cfe6f1",
+              "on-primary": "#f1faff",
+              "surface-container-high": "#e2e9ed",
+              "on-primary-fixed-variant": "#0d586c",
+              "on-secondary": "#f1faff",
+              "background": "#f7fafc",
+              "primary-container": "#9ddbf2",
+              "primary": "#24677b",
+              "surface-dim": "#d2dbe0"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, transparent 0%, #f7fafc 90%);
+        }
+        .editorial-line {
+            width: 1px;
+            height: 120px;
+            background: linear-gradient(to bottom, #24677b, transparent);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar: Mapped from Shared Components JSON -->
+<nav class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-md">
+<div class="flex justify-center items-center px-8 py-6 max-w-7xl mx-auto">
+<span class="text-2xl font-bold tracking-widest text-cyan-900 dark:text-cyan-100 font-manrope" style="">PACIFIC</span>
+</div>
+</nav>
+<main class="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-20">
+<!-- Background Layer -->
+<div class="absolute inset-0 z-0">
+<img alt="" class="w-full h-full object-cover opacity-60 mix-blend-multiply" data-alt="Calm deep turquoise ocean water with gentle rhythmic ripples under soft ethereal morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDzQcK9PK23ptNgE25FQlmUJJgws7BiyIPSs9qP8lB4DXoiZeWMPQIlfV_OfYpEtxk-ijfJ-3ikHCWSFJ-BWVDHChdOy7dl5Blht8YZ8ZX1m0z5dzN3wqRf4cuToMyh2RpaJNNdx10b75sW4dq0SfyJqPQvvBa3XsZCUJ_VLB8XdGz2x3iV5PjGQAnULqCIL8YrpNdWW-SEV-epJ8wogNmbGD76QqVTcTEJI63Sxu1S1gxgI6WQerG02kJnBAbBj3gZ068L9iKXg" style=""/>
+<div class="absolute inset-0 hero-gradient"></div>
+</div>
+<!-- Content Canvas -->
+<div class="relative z-10 max-w-5xl mx-auto px-6 text-center md:text-left flex flex-col items-center md:items-start">
+<!-- Visual Anchor -->
+<div class="hidden md:block editorial-line mb-8 ml-2"></div>
+<!-- Headline Cluster -->
+<div class="space-y-4 max-w-3xl">
+<h1 class="font-headline font-extrabold text-5xl md:text-7xl lg:text-8xl tracking-tight text-on-surface leading-tight" style="">
+                    Welcome to <span class="text-primary italic" style="">PACIFIC</span>
+</h1>
+<p class="font-body text-xl md:text-2xl text-on-surface-variant font-light tracking-wide max-w-xl leading-relaxed" style="">
+                    A curated archive of human traits and digital footprints. Embark on a sensory journey through data patterns.
+                </p>
+</div>
+<!-- Action Area -->
+<div class="mt-16 flex flex-col items-center md:items-start gap-8">
+<a class="group relative px-10 py-5 bg-primary hover:bg-primary-dim text-on-primary rounded-xl transition-all duration-500 shadow-xl shadow-primary/10 flex items-center gap-4 overflow-hidden" href="{{DATA:SCREEN:SCREEN_12}}">
+<span class="relative z-10 font-headline font-semibold tracking-widest uppercase text-sm">Start Exploration</span>
+<span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-primary-dim opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</a>
+<!-- Sub-instruction -->
+<div class="flex items-center gap-3 text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="explore" style="">explore</span>
+<span class="text-xs font-label uppercase tracking-[0.2em]" style="">Begin your archival experience</span>
+</div>
+</div>
+</div>
+<!-- Scroll Indicator (Asymmetric placement) -->
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 md:left-auto md:right-12 md:translate-x-0 z-20 flex flex-col items-center gap-4">
+<span class="text-[10px] uppercase tracking-[0.5em] text-outline vertical-text [writing-mode:vertical-lr] rotate-180" style="">Discovery</span>
+<div class="w-[1px] h-24 bg-surface-container-highest relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1/2 bg-primary"></div>
+</div>
+</div>
+</main>
+<!-- Footer: Mapped from Shared Components JSON -->
+<footer class="w-full py-12 mt-24 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/50">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 gap-6 max-w-7xl mx-auto">
+<div class="font-manrope font-black text-cyan-900 dark:text-cyan-100 tracking-tighter text-xl" style="">
+                PACIFIC
+            </div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-slate-400 dark:text-slate-600 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors font-inter text-xs tracking-widest uppercase" href="#" style="">Privacy Policy</a>
+<a class="text-slate-400 dark:text-slate-600 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors font-inter text-xs tracking-widest uppercase" href="#" style="">terms of Service</a>
+<a class="text-slate-400 dark:text-slate-600 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors font-inter text-xs tracking-widest uppercase" href="#" style="">Accessibility</a>
+</div>
+<div class="font-inter text-xs tracking-widest uppercase text-slate-400 dark:text-slate-600" style="">
+                © 2024 PACIFIC ARCHIVE. ALL RIGHTS RESERVED.
+            </div>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Ethereal Archive | Insight Collection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "background": "#f7fafc",
+              "primary-container": "#9ddbf2",
+              "surface-container-high": "#e2e9ed",
+              "on-primary-fixed-variant": "#0d586c",
+              "on-secondary": "#f1faff",
+              "on-primary": "#f1faff",
+              "surface-dim": "#d2dbe0",
+              "primary": "#24677b",
+              "on-background": "#2b3438",
+              "secondary-container": "#cfe6f1",
+              "error": "#a83836",
+              "tertiary": "#4c5f84",
+              "secondary-fixed": "#cfe6f1",
+              "primary-dim": "#125a6f",
+              "on-secondary-fixed-variant": "#495f68",
+              "tertiary-fixed-dim": "#adc1eb",
+              "tertiary-dim": "#405377",
+              "primary-fixed": "#9ddbf2",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#eff4f7",
+              "surface": "#f7fafc",
+              "on-primary-container": "#004e61",
+              "tertiary-container": "#bbcffa",
+              "outline": "#737c80",
+              "error-container": "#fa746f",
+              "on-tertiary-container": "#324669",
+              "tertiary-fixed": "#bbcffa",
+              "inverse-on-surface": "#9a9da0",
+              "surface-tint": "#24677b",
+              "error-dim": "#67040d",
+              "surface-container": "#e8eff3",
+              "on-secondary-container": "#3f555e",
+              "secondary-dim": "#41565f",
+              "outline-variant": "#aab3b8",
+              "on-primary-fixed": "#003a48",
+              "on-surface-variant": "#576065",
+              "inverse-primary": "#9ddbf2",
+              "on-tertiary-fixed": "#1e3254",
+              "on-secondary-fixed": "#2d424b",
+              "on-error-container": "#6e0a12",
+              "on-tertiary": "#f8f8ff",
+              "surface-variant": "#dbe4e9",
+              "secondary-fixed-dim": "#c1d8e2",
+              "surface-container-highest": "#dbe4e9",
+              "surface-bright": "#f7fafc",
+              "secondary": "#4d626b",
+              "on-error": "#fff7f6",
+              "on-tertiary-fixed-variant": "#3b4f73",
+              "primary-fixed-dim": "#90cde4",
+              "on-surface": "#2b3438",
+              "inverse-surface": "#0b0f11"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f7fafc;
+        color: #2b3438;
+      }
+      h1, h2, h3 {
+        font-family: 'Manrope', sans-serif;
+      }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
+<nav class="flex justify-center items-center w-full px-8 py-6">
+<div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope">
+                The Ethereal Archive
+            </div>
+</nav>
+</header>
+<!-- Progress Monolith -->
+<div class="fixed top-0 left-0 w-full h-2 bg-surface-variant z-[60]">
+<div class="h-full bg-primary transition-all duration-500 ease-out" id="progress-bar" style="width: 35%;"></div>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto w-full">
+<div class="space-y-20" id="survey-container">
+<!-- Question Header Section -->
+<section class="space-y-4">
+<span class="text-primary font-semibold tracking-widest uppercase text-xs">Section 04 / Insight Analysis</span>
+<h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-on-surface leading-tight">
+                    Reflecting on <span class="text-primary-dim">Behavioral Patterns</span>.
+                </h1>
+<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
+                    Choose the option that most naturally aligns with your immediate reaction. There are no incorrect interpretations within the archive.
+                </p>
+</section>
+<!-- Survey Question Card -->
+<div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border-0 space-y-12">
+<div class="space-y-2">
+<span class="text-sm font-medium text-outline" id="question-number">Question 12 of 30</span>
+<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">
+                        In a complex social environment, do you prioritize individual harmony or collective efficiency?
+                    </h2>
+</div>
+<!-- Selection Tiles -->
+<div class="grid grid-cols-1 gap-4" id="options-container">
+<button class="group flex items-center justify-between p-6 bg-surface-container-low hover:bg-primary-container/30 transition-all duration-300 rounded-xl text-left border border-transparent hover:border-primary/20">
+<span class="text-lg font-medium text-on-surface">I prioritize individual emotional well-being and harmony.</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">radio_button_unchecked</span>
+</button>
+<button class="group flex items-center justify-between p-6 bg-primary-container text-on-primary-container transition-all duration-300 rounded-xl text-left ring-2 ring-primary ring-inset">
+<span class="text-lg font-medium">I prioritize the efficiency and goals of the collective group.</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</button>
+<button class="group flex items-center justify-between p-6 bg-surface-container-low hover:bg-primary-container/30 transition-all duration-300 rounded-xl text-left border border-transparent hover:border-primary/20">
+<span class="text-lg font-medium text-on-surface">I seek a balance depending on the specific context provided.</span>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">radio_button_unchecked</span>
+</button>
+</div>
+<!-- Action Bar -->
+<div class="flex items-center justify-between pt-8">
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium">
+<span class="material-symbols-outlined">arrow_back</span>
+                        Previous
+                    </button>
+<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95">
+                        Continue to Next
+                    </button>
+</div>
+</div>
+</div>
+<!-- Success/Final Report State (Hidden by Default) -->
+<div class="hidden space-y-16 py-12" id="report-container">
+<div class="text-center space-y-6">
+<div class="inline-flex items-center justify-center w-24 h-24 bg-primary-container text-on-primary-container rounded-full mb-4">
+<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<h1 class="text-5xl font-extrabold tracking-tight">Archive Data <span class="text-primary">Synchronized</span>.</h1>
+<p class="text-xl text-on-surface-variant max-w-xl mx-auto">Your psychological profile has been indexed and prepared for retrieval. Review the generated data structure below.</p>
+</div>
+<div class="bg-inverse-surface p-8 rounded-xl shadow-2xl overflow-hidden group">
+<div class="flex justify-between items-center mb-6">
+<span class="text-surface-variant text-sm font-mono tracking-tighter uppercase">final_report.json</span>
+<button class="text-primary-fixed bg-white/10 px-4 py-2 rounded-lg text-sm hover:bg-white/20 transition-colors">Copy to Clipboard</button>
+</div>
+<pre class="text-primary-fixed-dim font-mono text-sm overflow-x-auto leading-relaxed custom-scrollbar" id="json-output">{
+  "user_name": "Ethereal Voyager",
+  "group_number": 7,
+  "ocean_score": { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
+  "ocean_profile": ["High O", "High C", "Mid E", "High A", "Low N"],
+  "responses": [...]
+}
+                </pre>
+</div>
+<div class="flex justify-center">
+<button class="px-12 py-5 bg-primary text-on-primary rounded-xl font-bold text-xl hover:bg-primary-dim transition-all shadow-xl active:scale-95">
+                    Return to Home
+                </button>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 border-t border-slate-200/20 dark:border-slate-800/20 bg-slate-100 dark:bg-slate-900 mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-8 gap-4">
+<div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope">The Ethereal Archive</div>
+<div class="flex gap-8">
+<a class="text-slate-500 dark:text-slate-400 font-inter text-sm hover:text-cyan-600 transition-colors" href="#">Privacy Policy</a>
+<a class="text-slate-500 dark:text-slate-400 font-inter text-sm hover:text-cyan-600 transition-colors" href="#">Terms of Service</a>
+<a class="text-slate-500 dark:text-slate-400 font-inter text-sm hover:text-cyan-600 transition-colors" href="#">Help Center</a>
+</div>
+<div class="text-slate-500 dark:text-slate-400 font-inter text-sm">
+                © 2024 The Ethereal Archive. All rights reserved.
+            </div>
+</div>
+</footer>
+<!-- Decorative Elements -->
+<div class="fixed top-1/4 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+<div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
+</body></html>
