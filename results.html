@@ -1,10 +1,12 @@
-<!DOCTYPE html><html class="light" lang="en"><head>
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>PACIFIC | Survey Complete</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -103,7 +105,7 @@
 <!-- Header Section: Centered Layout (from SCREEN_32) -->
 <header class="space-y-8 flex flex-col items-center">
 <div class="inline-flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full font-label text-xs font-bold uppercase tracking-widest" style="">
-<span class="material-symbols-outlined text-lg" style="font-variation-settings: &quot;FILL&quot; 1;">check_circle</span>
+<span class="material-symbols-outlined text-lg" style='font-variation-settings: "FILL" 1;'>check_circle</span>
                 Assessment Finalized
             </div>
 <h1 class="text-5xl lg:text-7xl font-headline font-extrabold text-on-surface text-editorial-tension leading-[1.1]" style="">
@@ -138,7 +140,7 @@
         // Retrieve data from localStorage (saved from previous survey steps)
         const reportData = localStorage.getItem('ocean_report');
         
-        if (GOOGLE_SHEETS_WEB_APP_URL && GOOGLE_SHEETS_WEB_APP_URL !== 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec' && reportData) {
+        if (GOOGLE_SHEETS_WEB_APP_URL && reportData) {
             try {
                 console.log('Attempting to sync data with Google Sheets...');
                 await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
@@ -149,7 +151,7 @@
                     },
                     body: reportData
                 });
-                console.log('Sync complete.');
+                console.log('Sync successfully initiated.');
             } catch (error) {
                 console.error('Data sync failed:', error);
                 // We proceed with navigation even if sync fails to ensure user flow
