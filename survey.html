@@ -108,7 +108,6 @@
             
             try {
                 state.userProfile = JSON.parse(profileStr);
-                console.log('User Profile loaded:', state.userProfile);
             } catch (e) {
                 elements.questionText.innerText = "Error: Failed to parse user profile data.";
                 return;
@@ -130,8 +129,6 @@
                 ]);
                 dataRaw = await resData.text();
                 dict = await resDict.json();
-                
-                console.log('Dictionary loaded:', dict);
             } catch (err) {
                 elements.questionText.innerText = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
                 return;
@@ -155,17 +152,14 @@
             }
             
             let targetIndices = [];
+            const traits = ['O', 'C', 'E', 'A', 'N'];
 
             if (ocean_profile && typeof ocean_profile === 'object') {
-                const traits = ['O', 'C', 'E', 'A', 'N'];
                 traits.forEach(traitKey => {
-                    const level = ocean_profile[traitKey]; // e.g., "high" or "low"
-                    if (level && dict[traitKey] && dict[traitKey][level]) {
-                        const indices = dict[traitKey][level];
-                        console.log(`Trait mapping found for ${traitKey}: ${indices}`);
+                    const label = ocean_profile[traitKey]; // e.g., "high" or "low"
+                    if (label && dict[traitKey] && dict[traitKey][label]) {
+                        const indices = dict[traitKey][label];
                         targetIndices = [...targetIndices, ...indices];
-                    } else {
-                        console.warn(`Missing mappings or level for trait: ${traitKey}`);
                     }
                 });
             }
@@ -176,11 +170,7 @@
                 original_index: idx 
             }));
 
-            console.log(`Total questions gathered: ${state.questions.length}`);
-            console.log('Final question list:', state.questions);
-
             if (state.questions.length === 0) {
-                console.log('No specific matches found. Loading fallback sequence.');
                 state.questions = allQuestions.slice(0, 25).map((q, i) => ({ ...q, original_index: i }));
             }
 
@@ -196,7 +186,7 @@
         if (!q) return;
 
         elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
-        elements.questionNumber.innerText = `Insight ${state.currentIndex + 1}`;
+        elements.questionNumber.innerText = `(Q ${q.original_index})`;
         elements.questionText.innerText = q.question;
 
         const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
