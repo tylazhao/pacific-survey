@@ -7,72 +7,24 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<script>
         tailwind.config = {
-            darkMode: "class",
             theme: {
                 extend: {
-                    colors: {
-                        "secondary-fixed-dim": "#c1d8e2",
-                        "inverse-surface": "#0b0f11",
-                        "on-secondary": "#f1faff",
-                        "secondary": "#4d626b",
-                        "surface-tint": "#24677b",
-                        "tertiary-dim": "#405377",
-                        "on-surface-variant": "#576065",
-                        "surface-container-highest": "#dbe4e9",
-                        "outline-variant": "#aab3b8",
-                        "on-secondary-fixed-variant": "#495f68",
-                        "error-container": "#fa746f",
-                        "secondary-fixed": "#cfe6f1",
-                        "surface-variant": "#dbe4e9",
-                        "on-primary-fixed": "#003a48",
-                        "on-error-container": "#6e0a12",
-                        "secondary-container": "#cfe6f1",
-                        "on-secondary-fixed": "#2d424b",
-                        "primary": "#24677b",
-                        "surface-container-high": "#e2e9ed",
-                        "inverse-on-surface": "#9a9da0",
-                        "on-secondary-container": "#3f555e",
-                        "error-dim": "#67040d",
-                        "on-tertiary-fixed-variant": "#3b4f73",
-                        "on-primary-fixed-variant": "#0d586c",
-                        "on-tertiary-container": "#324669",
-                        "primary-fixed-dim": "#90cde4",
-                        "surface-container-lowest": "#ffffff",
-                        "surface-dim": "#d2dbe0",
-                        "tertiary-fixed-dim": "#adc1eb",
-                        "on-primary-container": "#004e61",
-                        "error": "#a83836",
-                        "on-background": "#2b3438",
-                        "on-tertiary-fixed": "#1e3254",
-                        "on-surface": "#2b3438",
-                        "primary-fixed": "#9ddbf2",
-                        "background": "#f7fafc",
-                        "surface-container": "#e8eff3",
-                        "primary-container": "#9ddbf2",
-                        "surface-container-low": "#eff4f7",
-                        "secondary-dim": "#41565f",
-                        "primary-dim": "#125a6f",
-                        "outline": "#737c80",
-                        "surface": "#f7fafc",
-                        "on-tertiary": "#f8f8ff",
-                        "on-error": "#fff7f6",
-                        "tertiary-container": "#bbcffa",
-                        "tertiary": "#4c5f84",
-                        "inverse-primary": "#9ddbf2",
-                        "surface-bright": "#f7fafc",
-                        "tertiary-fixed": "#bbcffa",
-                        "on-primary": "#f1faff"
-                    },
                     fontFamily: {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
+                        manrope: ['Manrope', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
                     },
-                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-                },
-            },
+                    colors: {
+                        primary: '#0e7490', // cyan-700
+                        'primary-dim': '#155e75', // cyan-800
+                        background: '#ffffff',
+                        'surface-variant': '#f8fafc',
+                        'on-surface': '#0f172a',
+                        'on-surface-variant': '#475569',
+                    }
+                }
+            }
         }
     </script>
 <style>
@@ -80,88 +32,78 @@
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
             vertical-align: middle;
         }
-        .glass-nav {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
         .text-editorial-tension {
-            letter-spacing: -0.02em;
+            letter-spacing: -0.04em;
         }
     </style>
 </head>
-<body class="bg-background text-on-surface font-body selection:bg-primary-container">
-<!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 bg-slate-50/80 backdrop-blur-md transition-all duration-300 dark:bg-slate-900/80">
+<body class="bg-background text-on-surface font-body selection:bg-cyan-100 min-h-screen flex flex-col">
+<!-- Navigation -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-md transition-all duration-300 border-b border-slate-100">
 <div class="flex items-center px-8 py-6 max-w-7xl mx-auto justify-center">
-<span class="text-2xl font-bold tracking-widest text-cyan-900 dark:text-cyan-100 font-manrope" style="">PACIFIC</span>
+<span class="text-xl font-bold tracking-[0.2em] text-cyan-900 font-manrope">PACIFIC</span>
 </div>
 </nav>
-<main class="pt-32 pb-24 px-6 max-w-7xl mx-auto">
-<!-- Progress Monolith -->
-<div class="fixed top-0 left-0 w-full h-2 bg-surface-variant z-[60]">
-<div class="h-full bg-primary w-full"></div>
-</div>
+<main class="flex-grow flex items-center justify-center pt-24 pb-12 px-6">
 <div class="flex flex-col items-center text-center max-w-2xl mx-auto">
-<!-- Header Section: Centered Layout (from SCREEN_32) -->
-<header class="space-y-8 flex flex-col items-center">
-<div class="inline-flex items-center gap-3 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-full font-label text-xs font-bold uppercase tracking-widest" style="">
-<span class="material-symbols-outlined text-lg" style='font-variation-settings: "FILL" 1;'>check_circle</span>
-                Assessment Finalized
-            </div>
-<h1 class="text-5xl lg:text-7xl font-headline font-extrabold text-on-surface text-editorial-tension leading-[1.1]" style="">
-                Survey <span class="text-primary" style="">Complete.</span>
+<!-- Header Section -->
+<header class="space-y-10 flex flex-col items-center">
+<div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
+<span class="material-symbols-outlined text-sm text-green-600" style='font-variation-settings: "FILL" 1;'>check_circle</span>
+                    Assessment Finalized
+                </div>
+<h1 class="text-6xl lg:text-8xl font-manrope font-extrabold text-on-surface text-editorial-tension leading-none">
+                    Survey <span class="text-cyan-700">Complete.</span>
 </h1>
-<p class="text-xl text-on-surface-variant leading-relaxed" style="">
-                Thank you for your participation and help in this project. We've saved the report.
-            </p>
-<div class="flex flex-col sm:flex-row gap-4 pt-4">
-<button class="flex items-center justify-center gap-2 bg-primary text-on-primary px-12 py-4 rounded-xl font-semibold text-lg hover:bg-primary-dim transition-all group" id="finish-btn" style="">
-<span class="" style="">Done, Thank you !</span>
-</button>
+<p class="text-lg text-on-surface-variant leading-relaxed font-medium max-w-md">
+                    Thank you for your participation and help in this project. We've saved the report.
+                </p>
+<div class="pt-6">
+<button class="text-sm font-bold uppercase tracking-[0.2em] text-cyan-900 hover:text-cyan-600 transition-colors py-4 px-8 border-b-2 border-transparent hover:border-cyan-600" id="finish-btn">
+                        Done, Thank you !
+                    </button>
 </div>
 </header>
 </div>
 </main>
-<!-- Footer -->
-<footer class="w-full py-12 mt-24 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/50">
-<div class="flex flex-col md:flex-row justify-between items-center px-12 gap-6 max-w-7xl mx-auto">
-<div class="font-headline font-black text-cyan-900 dark:text-cyan-100 uppercase tracking-widest" style="">PACIFIC</div>
+<!-- Ultra-minimal Footer -->
+<footer class="w-full py-12 bg-white border-t border-slate-100">
+<div class="max-w-7xl mx-auto px-12">
+<div class="font-manrope font-bold text-sm text-cyan-900 uppercase tracking-[0.3em]">
+                PACIFIC
+            </div>
 </div>
 </footer>
 <script>
-    document.getElementById('finish-btn').addEventListener('click', async function() {
-        /** 
-         * CONFIGURATION: 
-         * 1. Deploy a Google Apps Script as a Web App.
-         * 2. Paste the provided Web App URL below.
-         */
-        const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
-        
-        // Retrieve data from localStorage (saved from previous survey steps)
-        const reportData = localStorage.getItem('ocean_report');
-        
-        if (GOOGLE_SHEETS_WEB_APP_URL && reportData) {
-            try {
-                console.log('Attempting to sync data with Google Sheets...');
-                await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Necessary for Google Apps Script Web App endpoints
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: reportData
-                });
-                console.log('Sync successfully initiated.');
-            } catch (error) {
-                console.error('Data sync failed:', error);
-                // We proceed with navigation even if sync fails to ensure user flow
+        document.getElementById('finish-btn').addEventListener('click', async function() {
+            // Placeholder for Google Sheets Web App URL
+            const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
+            
+            // Retrieve survey report from localStorage
+            const reportData = localStorage.getItem('ocean_report');
+            
+            if (reportData && GOOGLE_SHEETS_WEB_APP_URL !== 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec') {
+                try {
+                    console.log('Attempting to sync data with Google Sheets...');
+                    // Using no-cors as is common for Simple Triggers/Web Apps if not returning JSON
+                    await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: reportData
+                    });
+                    console.log('Sync successfully initiated.');
+                } catch (error) {
+                    console.error('Data sync failed:', error);
+                }
+            } else if (!reportData) {
+                console.warn('No report data found in localStorage key "ocean_report".');
             }
-        } else {
-            console.warn('Sync skipped: Web App URL missing or no local data found.');
-        }
 
-        // Navigation: Redirect to the Welcome Screen
-        window.location.href = 'index.html'; 
-    });
-</script>
+            // Redirect back to home
+            window.location.href = 'index.html'; 
+        });
+    </script>
 </body></html>
