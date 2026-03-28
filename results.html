@@ -8,24 +8,53 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        manrope: ['Manrope', 'sans-serif'],
-                        body: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#0e7490', // cyan-700
-                        'primary-dim': '#155e75', // cyan-800
-                        background: '#ffffff',
-                        'surface-variant': '#f8fafc',
-                        'on-surface': '#0f172a',
-                        'on-surface-variant': '#475569',
-                    }
+        document.getElementById('finish-btn').addEventListener('click', async function() {
+            const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
+            const statusEl = document.getElementById('sync-status');
+            
+            const updateStatus = (text, colorClass) => {
+                statusEl.textContent = text;
+                statusEl.className = `text-[10px] font-bold uppercase tracking-widest mt-2 ${colorClass}`;
+                statusEl.classList.remove('hidden');
+            };
+
+            // Retrieve survey report from localStorage
+            const reportData = localStorage.getItem('ocean_report');
+            console.log('Sync process initiated...');
+            
+            if (reportData) {
+                updateStatus('Syncing...', 'text-cyan-600');
+                try {
+                    console.log('Fetching Google Sheets Web App URL:', GOOGLE_SHEETS_WEB_APP_URL);
+                    console.log('Payload:', reportData);
+
+                    const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: reportData
+                    });
+                    
+                    console.log('Fetch request completed.');
+                    updateStatus('Success', 'text-green-600');
+                    
+                    // Brief delay to show success status before redirect
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                } catch (error) {
+                    console.error('Data sync failed during fetch:', error);
+                    updateStatus('Error', 'text-red-600');
+                    // Wait a bit so the user can see the error
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                 }
+            } else {
+                console.warn('No report data found in localStorage key "ocean_report". Skipping sync.');
             }
-        }
+
+            console.log('Redirecting to home...');
+            window.location.href = 'index.html'; 
+        });
     </script>
 <style>
         .material-symbols-outlined {
@@ -51,7 +80,7 @@
 <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">
 <span class="material-symbols-outlined text-sm text-green-600" style='font-variation-settings: "FILL" 1;'>check_circle</span>
                     Assessment Finalized
-                </div>
+                </div><div class="hidden text-[10px] font-bold uppercase tracking-widest mt-2" id="sync-status"></div>
 <h1 class="text-6xl lg:text-8xl font-manrope font-extrabold text-on-surface text-editorial-tension leading-none">
                     Survey <span class="text-cyan-700">Complete.</span>
 </h1>
@@ -76,17 +105,26 @@
 </footer>
 <script>
         document.getElementById('finish-btn').addEventListener('click', async function() {
-            // Placeholder for Google Sheets Web App URL
             const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
+            const statusEl = document.getElementById('sync-status');
             
+            const updateStatus = (text, colorClass) => {
+                statusEl.textContent = text;
+                statusEl.className = `text-[10px] font-bold uppercase tracking-widest mt-2 ${colorClass}`;
+                statusEl.classList.remove('hidden');
+            };
+
             // Retrieve survey report from localStorage
             const reportData = localStorage.getItem('ocean_report');
+            console.log('Sync process initiated...');
             
-            if (reportData && GOOGLE_SHEETS_WEB_APP_URL !== 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec') {
+            if (reportData) {
+                updateStatus('Syncing...', 'text-cyan-600');
                 try {
-                    console.log('Attempting to sync data with Google Sheets...');
-                    // Using no-cors as is common for Simple Triggers/Web Apps if not returning JSON
-                    await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                    console.log('Fetching Google Sheets Web App URL:', GOOGLE_SHEETS_WEB_APP_URL);
+                    console.log('Payload:', reportData);
+
+                    const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
                         method: 'POST',
                         mode: 'no-cors',
                         headers: {
@@ -94,15 +132,23 @@
                         },
                         body: reportData
                     });
-                    console.log('Sync successfully initiated.');
+                    
+                    console.log('Fetch request completed.');
+                    updateStatus('Success', 'text-green-600');
+                    
+                    // Brief delay to show success status before redirect
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                 } catch (error) {
-                    console.error('Data sync failed:', error);
+                    console.error('Data sync failed during fetch:', error);
+                    updateStatus('Error', 'text-red-600');
+                    // Wait a bit so the user can see the error
+                    await new Promise(resolve => setTimeout(resolve, 2000));
                 }
-            } else if (!reportData) {
-                console.warn('No report data found in localStorage key "ocean_report".');
+            } else {
+                console.warn('No report data found in localStorage key "ocean_report". Skipping sync.');
             }
 
-            // Redirect back to home
+            console.log('Redirecting to home...');
             window.location.href = 'index.html'; 
         });
     </script>
