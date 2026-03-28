@@ -71,7 +71,7 @@
 </main>
 <!-- Footer -->
 <footer class="w-full py-12 border-t border-slate-200/20 dark:border-slate-800/20 bg-slate-100 dark:bg-slate-900 mt-auto">
-<div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-8 gap-4">
+<div class="max-w-7xl mx-auto px-8">
 <div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope">PACIFIC</div>
 </div>
 </footer>
@@ -101,8 +101,7 @@
     async function init() {
         try {
             const profileStr = localStorage.getItem('userProfile');
-            console.log('Retrieved userProfile string from localStorage:', profileStr);
-
+            
             if (!profileStr) {
                 const errorMsg = "Error: User profile missing from storage. Please restart the analysis.";
                 elements.questionText.innerText = errorMsg;
@@ -112,7 +111,6 @@
             
             try {
                 state.userProfile = JSON.parse(profileStr);
-                console.log('Parsed userProfile object:', state.userProfile);
             } catch (e) {
                 const errorMsg = "Error: Failed to parse user profile data.";
                 elements.questionText.innerText = errorMsg;
@@ -120,8 +118,8 @@
                 return;
             }
 
-            const { ocean_profile } = state.userProfile;
-            if (!ocean_profile) {
+            const { oceanProfile } = state.userProfile;
+            if (!oceanProfile) {
                 const errorMsg = "Error: Ocean profile traits are missing from your user data.";
                 elements.questionText.innerText = errorMsg;
                 console.error(errorMsg);
@@ -142,7 +140,6 @@
                 ]);
                 dataRaw = await resData.text();
                 dict = await resDict.json();
-                console.log('Fetched dict.json:', dict);
             } catch (err) {
                 const errorMsg = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
                 elements.questionText.innerText = errorMsg;
@@ -155,7 +152,6 @@
                 allQuestions = dataRaw.trim().split('\n')
                     .filter(line => line.trim().length > 0)
                     .map(line => JSON.parse(line));
-                console.log('Structure check - First question from JSONL:', allQuestions[0]);
             } catch (err) {
                 const errorMsg = "Error: The archive data format (JSONL) is invalid.";
                 elements.questionText.innerText = errorMsg;
@@ -165,29 +161,15 @@
             
             let targetIndices = [];
             const traits = ['O', 'C', 'E', 'A', 'N'];
-            let lookupFailed = false;
 
             traits.forEach(traitKey => {
-                const label = ocean_profile[traitKey]; // e.g., "high" or "low"
+                const label = oceanProfile[traitKey];
                 if (label && dict[traitKey] && dict[traitKey][label]) {
                     const traitIndices = dict[traitKey][label];
-                    console.log(`${traitKey} (${label}):`, traitIndices);
                     targetIndices = [...targetIndices, ...traitIndices];
-                } else {
-                    console.error(`Lookup failed for trait: ${traitKey} with label: ${label}`);
-                    lookupFailed = true;
                 }
             });
 
-            if (lookupFailed) {
-                const errorMsg = "Error: Failed to map profile traits to question indices. Archive mapping data may be incomplete.";
-                elements.questionText.innerText = errorMsg;
-                // We'll proceed with fallback if possible, but the UI shows error
-            }
-
-            console.log('Final array of 25 indices:', targetIndices);
-
-            // Map indices to actual questions
             state.questions = targetIndices.map(idx => {
                 const q = allQuestions[idx];
                 return { 
@@ -286,9 +268,9 @@
 
         const finalReport = {
             user_name: state.userProfile.name || "Ethereal Voyager",
-            group_number: state.userProfile.groupNumber || 1,
+            group_number: state.userProfile.group || 1,
             ocean_score: state.userProfile.oceanScores,
-            ocean_profile: state.userProfile.ocean_profile,
+            ocean_profile: state.userProfile.oceanProfile,
             timestamp: new Date().toISOString(),
             status: 'completed',
             responses: responses
