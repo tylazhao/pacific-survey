@@ -7,27 +7,6 @@
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
-      function completeAnalysis() {
-        // Generate detailed report data reflecting the UI example
-        const reportData = {
-          user_name: "Ethereal Voyager",
-          group_number: 7,
-          ocean_score: { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
-          ocean_profile: ["High O", "High C", "Mid E", "High A", "Low N"],
-          timestamp: new Date().toISOString(),
-          status: 'completed',
-          archive_id: 'ETH-' + Math.random().toString(36).substr(2, 9).toUpperCase()
-        };
-        
-        // Save to localStorage
-        localStorage.setItem('ethereal_archive_report', JSON.stringify(reportData));
-        
-        // Redirect to results.html
-        window.location.href = 'results.html';
-      }
-    </script>
 <style>
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -51,13 +30,13 @@
 <header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
 <nav class="flex justify-center items-center w-full px-8 py-6">
 <div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope">
-                The Ethereal Archive
-            </div>
+            The Ethereal Archive
+        </div>
 </nav>
 </header>
 <!-- Progress Monolith -->
 <div class="fixed top-0 left-0 w-full h-2 bg-surface-variant z-[60]">
-<div class="h-full bg-primary transition-all duration-500 ease-out" id="progress-bar" style="width: 35%;"></div>
+<div class="h-full bg-primary transition-all duration-500 ease-out" id="progress-bar" style="width: 100%;"></div>
 </div>
 <!-- Main Content Canvas -->
 <main class="flex-grow pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto w-full">
@@ -66,19 +45,19 @@
 <section class="space-y-4">
 <span class="text-primary font-semibold tracking-widest uppercase text-xs">Section 04 / Insight Analysis</span>
 <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-on-surface leading-tight">
-                    Reflecting on <span class="text-primary-dim">Behavioral Patterns</span>.
-                </h1>
+                Reflecting on <span class="text-primary-dim">Behavioral Patterns</span>.
+            </h1>
 <p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">
-                    Choose the option that most naturally aligns with your immediate reaction. There are no incorrect interpretations within the archive.
-                </p>
+                Choose the option that most naturally aligns with your immediate reaction. There are no incorrect interpretations within the archive.
+            </p>
 </section>
 <!-- Survey Question Card -->
 <div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border-0 space-y-12">
 <div class="space-y-2">
-<span class="text-sm font-medium text-outline" id="question-number">Question 12 of 30</span>
+<span class="text-sm font-medium text-outline" id="question-number">Question 30 of 30</span>
 <h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">
-                        In a complex social environment, do you prioritize individual harmony or collective efficiency?
-                    </h2>
+                    In a complex social environment, do you prioritize individual harmony or collective efficiency?
+                </h2>
 </div>
 <!-- Selection Tiles -->
 <div class="grid grid-cols-1 gap-4" id="options-container">
@@ -99,41 +78,12 @@
 <div class="flex items-center justify-between pt-8">
 <button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium">
 <span class="material-symbols-outlined">arrow_back</span>
-                        Previous
-                    </button>
-<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95" onclick="completeAnalysis()">
-                        Complete Analysis
-                    </button>
-</div>
-</div>
-</div>
-<!-- Success/Final Report State (Hidden by Default) -->
-<div class="hidden space-y-16 py-12" id="report-container">
-<div class="text-center space-y-6">
-<div class="inline-flex items-center justify-center w-24 h-24 bg-primary-container text-on-primary-container rounded-full mb-4">
-<span class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">verified</span>
-</div>
-<h1 class="text-5xl font-extrabold tracking-tight">Archive Data <span class="text-primary">Synchronized</span>.</h1>
-<p class="text-xl text-on-surface-variant max-w-xl mx-auto">Your psychological profile has been indexed and prepared for retrieval. Review the generated data structure below.</p>
-</div>
-<div class="bg-inverse-surface p-8 rounded-xl shadow-2xl overflow-hidden group">
-<div class="flex justify-between items-center mb-6">
-<span class="text-surface-variant text-sm font-mono tracking-tighter uppercase">final_report.json</span>
-<button class="text-primary-fixed bg-white/10 px-4 py-2 rounded-lg text-sm hover:bg-white/20 transition-colors">Copy to Clipboard</button>
-</div>
-<pre class="text-primary-fixed-dim font-mono text-sm overflow-x-auto leading-relaxed custom-scrollbar" id="json-output">{
-  "user_name": "Ethereal Voyager",
-  "group_number": 7,
-  "ocean_score": { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
-  "ocean_profile": ["High O", "High C", "Mid E", "High A", "Low N"],
-  "responses": [...]
-}
-                </pre>
-</div>
-<div class="flex justify-center">
-<button class="px-12 py-5 bg-primary text-on-primary rounded-xl font-bold text-xl hover:bg-primary-dim transition-all shadow-xl active:scale-95">
-                    Return to Home
+                    Previous
                 </button>
+<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95" onclick="completeAnalysis()">
+                    Complete Analysis
+                </button>
+</div>
 </div>
 </div>
 </main>
@@ -147,22 +97,30 @@
 <div class="fixed top-1/4 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <script>
-      function completeAnalysis() {
-        // Generate detailed report data reflecting the UI example
+    function completeAnalysis() {
+        // Generate detailed report data
         const reportData = {
-          user_name: "Ethereal Voyager",
-          group_number: 7,
-          ocean_score: { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
-          ocean_profile: ["High O", "High C", "Mid E", "High A", "Low N"],
-          timestamp: new Date().toISOString(),
-          status: 'completed',
-          archive_id: 'ETH-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+            user_name: "Ethereal Voyager",
+            group_number: 7,
+            ocean_score: { "O": 82, "C": 65, "E": 45, "A": 91, "N": 30 },
+            ocean_profile: ["High O", "High C", "Mid E", "High A", "Low N"],
+            timestamp: new Date().toISOString(),
+            status: 'completed',
+            archive_id: 'ETH-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+            responses: [
+                { q: 1, text: "Openness to Experience", value: 82 },
+                { q: 2, text: "Conscientiousness", value: 65 },
+                { q: 3, text: "Extraversion", value: 45 },
+                { q: 4, text: "Agreeableness", value: 91 },
+                { q: 5, text: "Emotional Stability", value: 70 }
+            ]
         };
         
         // Save to localStorage
         localStorage.setItem('ethereal_archive_report', JSON.stringify(reportData));
         
-        // Redirect to results.html
-        window.location.href = 'results.html';
-      }
-    </script></body></html>
+        // Redirect to results.html - handles GitHub Pages and other static hosts perfectly
+        window.location.href = "results.html";
+    }
+</script>
+</body></html>
