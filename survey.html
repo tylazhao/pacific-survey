@@ -101,19 +101,32 @@
     async function init() {
         try {
             const profileStr = localStorage.getItem('userProfile');
+            console.log('Retrieved userProfile string from localStorage:', profileStr);
+
             if (!profileStr) {
-                elements.questionText.innerText = "Error: User profile missing from storage. Please restart the analysis.";
+                const errorMsg = "Error: User profile missing from storage. Please restart the analysis.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg);
                 return;
             }
             
             try {
                 state.userProfile = JSON.parse(profileStr);
+                console.log('Parsed userProfile object:', state.userProfile);
             } catch (e) {
-                elements.questionText.innerText = "Error: Failed to parse user profile data.";
+                const errorMsg = "Error: Failed to parse user profile data.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg, e);
                 return;
             }
 
             const { ocean_profile } = state.userProfile;
+            if (!ocean_profile) {
+                const errorMsg = "Error: Ocean profile traits are missing from your user data.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg);
+                return;
+            }
 
             const fetchData = async (url) => {
                 const res = await fetch(url);
@@ -129,8 +142,11 @@
                 ]);
                 dataRaw = await resData.text();
                 dict = await resDict.json();
+                console.log('Fetched dict.json:', dict);
             } catch (err) {
-                elements.questionText.innerText = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
+                const errorMsg = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg);
                 return;
             }
 
@@ -138,37 +154,47 @@
             try {
                 allQuestions = dataRaw.trim().split('\n')
                     .filter(line => line.trim().length > 0)
-                    .map(line => {
-                        const parsed = JSON.parse(line);
-                        return {
-                            question: parsed.question,
-                            options: parsed.options,
-                            ground_truth: parsed.ground_truth_choice_id
-                        };
-                    });
+                    .map(line => JSON.parse(line));
+                console.log('Structure check - First question from JSONL:', allQuestions[0]);
             } catch (err) {
-                elements.questionText.innerText = "Error: The archive data format (JSONL) is invalid.";
+                const errorMsg = "Error: The archive data format (JSONL) is invalid.";
+                elements.questionText.innerText = errorMsg;
+                console.error(errorMsg, err);
                 return;
             }
             
             let targetIndices = [];
             const traits = ['O', 'C', 'E', 'A', 'N'];
+            let lookupFailed = false;
 
-            if (ocean_profile && typeof ocean_profile === 'object') {
-                traits.forEach(traitKey => {
-                    const label = ocean_profile[traitKey]; // e.g., "high" or "low"
-                    if (label && dict[traitKey] && dict[traitKey][label]) {
-                        const indices = dict[traitKey][label];
-                        targetIndices = [...targetIndices, ...indices];
-                    }
-                });
+            traits.forEach(traitKey => {
+                const label = ocean_profile[traitKey]; // e.g., "high" or "low"
+                if (label && dict[traitKey] && dict[traitKey][label]) {
+                    const traitIndices = dict[traitKey][label];
+                    console.log(`${traitKey} (${label}):`, traitIndices);
+                    targetIndices = [...targetIndices, ...traitIndices];
+                } else {
+                    console.error(`Lookup failed for trait: ${traitKey} with label: ${label}`);
+                    lookupFailed = true;
+                }
+            });
+
+            if (lookupFailed) {
+                const errorMsg = "Error: Failed to map profile traits to question indices. Archive mapping data may be incomplete.";
+                elements.questionText.innerText = errorMsg;
+                // We'll proceed with fallback if possible, but the UI shows error
             }
 
+            console.log('Final array of 25 indices:', targetIndices);
+
             // Map indices to actual questions
-            state.questions = targetIndices.map(idx => ({ 
-                ...allQuestions[idx], 
-                original_index: idx 
-            }));
+            state.questions = targetIndices.map(idx => {
+                const q = allQuestions[idx];
+                return { 
+                    ...q, 
+                    original_index: idx 
+                };
+            });
 
             if (state.questions.length === 0) {
                 state.questions = allQuestions.slice(0, 25).map((q, i) => ({ ...q, original_index: i }));
@@ -255,7 +281,7 @@
             question_text: q.question,
             options_text: q.options,
             selected_option: state.answers[idx],
-            ground_truth: q.ground_truth !== undefined ? q.ground_truth : null
+            ground_truth: q.ground_truth_choice_id !== undefined ? q.ground_truth_choice_id : null
         }));
 
         const finalReport = {
