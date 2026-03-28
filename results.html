@@ -14,7 +14,7 @@
             const textEl = document.getElementById('sync-text');
             const spinner = document.getElementById('sync-spinner');
             
-            const setStatus = (state) => {
+            const setStatus = (state, customMsg) => {
                 // Reset classes
                 indicator.className = 'flex items-center gap-3 px-6 py-3 rounded-full border text-[12px] font-bold uppercase tracking-widest transition-all duration-500 shadow-sm';
                 spinner.className = 'material-symbols-outlined text-lg';
@@ -23,29 +23,30 @@
                 switch(state) {
                     case 'INITIAL':
                         indicator.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-500');
-                        textEl.textContent = 'Ready to sync...';
+                        textEl.textContent = 'ARCHIVE STATUS: READY TO SYNC';
                         break;
-                    case 'CONNECTING':
+                    case 'SYNCING':
                         indicator.classList.add('border-amber-200', 'bg-amber-50', 'text-amber-700', 'animate-pulse');
                         spinner.classList.add('animate-spin');
-                        textEl.textContent = 'Connecting to Archive...';
-                        break;
-                    case 'SENDING':
-                        indicator.classList.add('border-blue-200', 'bg-blue-50', 'text-blue-700');
-                        spinner.classList.add('animate-spin');
-                        textEl.textContent = 'Transmitting report...';
+                        textEl.textContent = 'ARCHIVE STATUS: SYNCING...';
                         break;
                     case 'SUCCESS':
                         indicator.classList.add('border-green-200', 'bg-green-50', 'text-green-700', 'scale-105');
                         spinner.textContent = 'check_circle';
                         spinner.style.fontVariationSettings = "'FILL' 1";
-                        textEl.textContent = 'Report saved to archive successfully!';
+                        textEl.textContent = 'ARCHIVE STATUS: SYNC COMPLETE';
                         break;
                     case 'ERROR':
                         indicator.classList.add('border-red-200', 'bg-red-50', 'text-red-700');
                         spinner.textContent = 'error';
                         spinner.style.fontVariationSettings = "'FILL' 1";
-                        textEl.textContent = 'Sync failed. Please check connection.';
+                        textEl.textContent = customMsg || 'ARCHIVE STATUS: SYNC FAILED';
+                        break;
+                    case 'TIMEOUT':
+                        indicator.classList.add('border-red-200', 'bg-red-50', 'text-red-700');
+                        spinner.textContent = 'timer_off';
+                        spinner.style.fontVariationSettings = "'FILL' 1";
+                        textEl.textContent = 'ARCHIVE STATUS: CONNECTION TIMEOUT';
                         break;
                 }
             };
@@ -54,32 +55,48 @@
             setStatus('INITIAL');
 
             finishBtn.addEventListener('click', async function() {
-                const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbz_3gHA3UywWtArgeX93uvl8X4BTfDQLAutxWBrpp439sU5v92l6S8n6BD_KaT_l1tI/exec';
+                const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
                 const reportData = localStorage.getItem('ocean_report');
                 
-                if (reportData) {
-                    try {
-                        setStatus('CONNECTING');
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                if (!reportData) {
+                    setStatus('ERROR', 'ARCHIVE STATUS: ERROR - DATA MISSING');
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    window.location.href = 'index.html';
+                    return;
+                }
 
-                        setStatus('SENDING');
-                        
+                try {
+                    setStatus('SYNCING');
+                    
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+                    try {
                         await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
                             method: 'POST',
                             mode: 'no-cors',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: reportData
+                            body: reportData,
+                            signal: controller.signal
                         });
                         
+                        clearTimeout(timeoutId);
                         setStatus('SUCCESS');
                         await new Promise(resolve => setTimeout(resolve, 2000));
-                    } catch (error) {
-                        console.error('Data sync failed:', error);
-                        setStatus('ERROR');
+                    } catch (fetchError) {
+                        if (fetchError.name === 'AbortError') {
+                            setStatus('TIMEOUT');
+                        } else {
+                            throw fetchError;
+                        }
                         await new Promise(resolve => setTimeout(resolve, 3000));
                     }
+                } catch (error) {
+                    console.error('Data sync failed:', error);
+                    setStatus('ERROR');
+                    await new Promise(resolve => setTimeout(resolve, 3000));
                 }
 
                 window.location.href = 'index.html'; 
@@ -110,11 +127,11 @@
 <div class="flex flex-col items-center gap-4 min-h-[56px]" id="sync-status-container">
 <div class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-2">
 <span class="material-symbols-outlined text-sm" style='font-variation-settings: "FILL" 1;'>verified</span>
-                        Archive Status
+                        Cloud Archive
                     </div>
 <div class="flex items-center gap-3 px-6 py-3 rounded-full border text-[12px] font-bold uppercase tracking-widest transition-all duration-500 shadow-sm border-slate-200 bg-slate-50 text-slate-500" id="sync-indicator">
 <span class="material-symbols-outlined text-lg" id="sync-spinner">sync</span>
-<span id="sync-text">Ready to sync...</span>
+<span id="sync-text">ARCHIVE STATUS: READY TO SYNC</span>
 </div>
 </div>
 <h1 class="text-6xl lg:text-8xl font-manrope font-extrabold text-on-surface text-editorial-tension leading-none mt-4">
