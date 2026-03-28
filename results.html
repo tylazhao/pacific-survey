@@ -19,47 +19,42 @@
                 indicator.className = 'flex items-center gap-3 px-6 py-3 rounded-full border text-[12px] font-bold uppercase tracking-widest transition-all duration-500 shadow-sm';
                 spinner.className = 'material-symbols-outlined text-lg';
                 spinner.textContent = 'sync';
+                spinner.style.fontVariationSettings = "'FILL' 0";
                 
                 switch(state) {
-                    case 'INITIAL':
+                    case 'READY':
                         indicator.classList.add('border-slate-200', 'bg-slate-50', 'text-slate-500');
-                        textEl.textContent = 'ARCHIVE STATUS: READY TO SYNC';
+                        textEl.textContent = 'ARCHIVE STATUS: READY';
                         break;
                     case 'SYNCING':
                         indicator.classList.add('border-amber-200', 'bg-amber-50', 'text-amber-700', 'animate-pulse');
                         spinner.classList.add('animate-spin');
-                        textEl.textContent = 'ARCHIVE STATUS: SYNCING...';
+                        textEl.textContent = 'ARCHIVE STATUS: SYNCING';
                         break;
-                    case 'SUCCESS':
+                    case 'COMPLETE':
                         indicator.classList.add('border-green-200', 'bg-green-50', 'text-green-700', 'scale-105');
                         spinner.textContent = 'check_circle';
                         spinner.style.fontVariationSettings = "'FILL' 1";
-                        textEl.textContent = 'ARCHIVE STATUS: SYNC COMPLETE';
+                        textEl.textContent = 'ARCHIVE STATUS: COMPLETE';
                         break;
-                    case 'ERROR':
+                    case 'FAILED':
                         indicator.classList.add('border-red-200', 'bg-red-50', 'text-red-700');
                         spinner.textContent = 'error';
                         spinner.style.fontVariationSettings = "'FILL' 1";
-                        textEl.textContent = customMsg || 'ARCHIVE STATUS: SYNC FAILED';
-                        break;
-                    case 'TIMEOUT':
-                        indicator.classList.add('border-red-200', 'bg-red-50', 'text-red-700');
-                        spinner.textContent = 'timer_off';
-                        spinner.style.fontVariationSettings = "'FILL' 1";
-                        textEl.textContent = 'ARCHIVE STATUS: CONNECTION TIMEOUT';
+                        textEl.textContent = customMsg || 'ARCHIVE STATUS: FAILED';
                         break;
                 }
             };
 
             // Set initial state
-            setStatus('INITIAL');
+            setStatus('READY');
 
             async function syncData() {
-                const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwWkm5gwcnfNKGsuIdqbwgtQKuHvpTEPMIDAGd_fKqVAUJi7hu-WQSGAVAPUC3S6J1b/exec';
+                const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxF6zGGEsyerTWURt7QNzn3m-nTscoUAhxEMHqCzqxYUpc5HccIkgWTiB9dX_XdId3g/exec';
                 const reportData = localStorage.getItem('ocean_report');
                 
                 if (!reportData) {
-                    setStatus('ERROR', 'Error: No survey data found in storage. Please complete the survey first.');
+                    setStatus('FAILED', 'FAILED: NO DATA FOUND');
                     return;
                 }
 
@@ -67,9 +62,10 @@
                     setStatus('SYNCING');
                     
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second network timeout
 
                     try {
+                        // Using 'no-cors' as typical for Google Apps Script POST redirects in client-side JS
                         await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
                             method: 'POST',
                             mode: 'no-cors',
@@ -81,17 +77,17 @@
                         });
                         
                         clearTimeout(timeoutId);
-                        setStatus('SUCCESS');
+                        setStatus('COMPLETE');
                     } catch (fetchError) {
                         if (fetchError.name === 'AbortError') {
-                            setStatus('TIMEOUT');
+                            setStatus('FAILED', 'FAILED: CONNECTION TIMEOUT');
                         } else {
                             throw fetchError;
                         }
                     }
                 } catch (error) {
                     console.error('Data sync failed:', error);
-                    setStatus('ERROR');
+                    setStatus('FAILED');
                 }
             }
 
@@ -131,7 +127,7 @@
                     </div>
 <div class="flex items-center gap-3 px-6 py-3 rounded-full border text-[12px] font-bold uppercase tracking-widest transition-all duration-500 shadow-sm border-slate-200 bg-slate-50 text-slate-500" id="sync-indicator">
 <span class="material-symbols-outlined text-lg" id="sync-spinner">sync</span>
-<span id="sync-text">ARCHIVE STATUS: READY TO SYNC</span>
+<span id="sync-text">ARCHIVE STATUS: READY</span>
 </div>
 </div>
 <h1 class="text-6xl lg:text-8xl font-manrope font-extrabold text-on-surface text-editorial-tension leading-none mt-4">
@@ -141,7 +137,7 @@
                     Thank you for your participation and help in this project. We've archived your results.
                 </p>
 <div class="pt-8">
-<button class="text-sm font-bold uppercase tracking-[0.2em] text-cyan-900 hover:text-cyan-600 transition-colors py-4 px-10 border-b-2 border-transparent hover:border-cyan-600 group" id="finish-btn">
+<button class="text-sm font-bold uppercase tracking-[0.2em] text-cyan-900 hover:text-cyan-600 transition-colors py-4 px-10 border-b-2 border-transparent hover:border-cyan-600 group flex items-center" id="finish-btn">
                         Done, Thank you !
                         <span class="material-symbols-outlined ml-2 text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
 </button>
