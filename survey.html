@@ -29,7 +29,7 @@
 <!-- TopAppBar -->
 <header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
 <nav class="flex justify-center items-center w-full px-8 py-6">
-<div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope" style="">
+<div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope">
             PACIFIC
         </div>
 </nav>
@@ -43,14 +43,14 @@
 <div class="space-y-20" id="survey-container">
 <!-- Question Header Section -->
 <section class="space-y-4">
-<span class="text-primary font-semibold tracking-widest uppercase text-xs" id="section-label" style="">Question 1/25</span>
-<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed" style="">Choose the best option that aligns with your preference based on the question below, or select skip if you feel none of them match.</p>
+<span class="text-primary font-semibold tracking-widest uppercase text-xs" id="section-label">Question 1/25</span>
+<p class="text-on-surface-variant text-lg max-w-2xl leading-relaxed">Choose the best option that aligns with your preference based on the question below, or select skip if you feel none of them match.</p>
 </section>
 <!-- Survey Question Card -->
 <div class="bg-surface-container-lowest p-8 md:p-12 rounded-xl shadow-sm border-0 space-y-12">
 <div class="space-y-2">
-<span class="text-sm font-medium text-outline" id="question-number" style="">Loading...</span>
-<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text" style="">Failed to load archive data. Please try again.</h2>
+<span class="text-sm font-medium text-outline" id="question-number">Loading...</span>
+<h2 class="text-2xl md:text-3xl font-bold text-on-surface leading-snug" id="question-text">Failed to load archive data. Please try again.</h2>
 </div>
 <!-- Selection Tiles -->
 <div class="grid grid-cols-1 gap-4" id="options-container">
@@ -58,12 +58,12 @@
 </div>
 <!-- Action Bar -->
 <div class="flex items-center justify-between pt-8">
-<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" onclick="handlePrev()" style="">
-<span class="material-symbols-outlined" style="">arrow_back</span>
+<button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" onclick="handlePrev()">
+<span class="material-symbols-outlined">arrow_back</span>
                     Previous
                 </button>
-<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="next-btn" onclick="handleNext()" style="">
-<span class="" id="next-btn-text" style="">Continue to Next</span>
+<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="next-btn" onclick="handleNext()">
+<span id="next-btn-text">Continue to Next</span>
 </button>
 </div>
 </div>
@@ -72,7 +72,7 @@
 <!-- Footer -->
 <footer class="w-full py-12 border-t border-slate-200/20 dark:border-slate-800/20 bg-slate-100 dark:bg-slate-900 mt-auto">
 <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-8 gap-4">
-<div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope" style="">PACIFIC</div>
+<div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope">PACIFIC</div>
 </div>
 </footer>
 <!-- Decorative Elements -->
@@ -82,7 +82,7 @@
     const state = {
         questions: [],
         currentIndex: 0,
-        answers: {}, // Key: q_index, value: selected_index
+        answers: {},
         userProfile: null,
         resultsPage: 'results.html'
     };
@@ -100,27 +100,57 @@
 
     async function init() {
         try {
-            // 1. Fetch data
-            const [dataRaw, dict] = await Promise.all([
-                fetch('data_sample.jsonl').then(res => res.text()),
-                fetch('dict.json').then(res => res.json())
-            ]);
-
-            const allQuestions = dataRaw.trim().split('\n').map(line => JSON.parse(line));
-            
-            // 2. Retrieve userProfile
             const profileStr = localStorage.getItem('userProfile');
             if (!profileStr) {
-                console.error("No userProfile found");
-                elements.questionText.innerText = "Error: User profile missing. Please restart the analysis.";
+                elements.questionText.innerText = "Error: User profile missing from storage. Please restart the analysis.";
                 return;
             }
-            state.userProfile = JSON.parse(profileStr);
+            
+            try {
+                state.userProfile = JSON.parse(profileStr);
+            } catch (e) {
+                elements.questionText.innerText = "Error: Failed to parse user profile data.";
+                return;
+            }
+
             const { oceanProfile } = state.userProfile;
 
-            // 3. Find question indices based on oceanProfile (dictionary trait logic)
+            const fetchData = async (url) => {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res;
+            };
+
+            let dataRaw, dict;
+            try {
+                const [resData, resDict] = await Promise.all([
+                    fetchData('data_sample.jsonl'),
+                    fetchData('dict.json')
+                ]);
+                dataRaw = await resData.text();
+                dict = await resDict.json();
+            } catch (err) {
+                elements.questionText.innerText = `Fetch Error: ${err.message}`;
+                return;
+            }
+
+            // Updated processing logic for JSONL
+            let allQuestions;
+            try {
+                allQuestions = dataRaw.trim().split('\n').map(line => {
+                    const parsed = JSON.parse(line);
+                    return {
+                        question: parsed.question,
+                        options: parsed.options,
+                        ground_truth: parsed.ground_truth_choice_id
+                    };
+                });
+            } catch (err) {
+                elements.questionText.innerText = "Error: The archive data format is invalid.";
+                return;
+            }
+            
             let targetIndices = [];
-            // oceanProfile example: ["High O", "Low C", ...]
             oceanProfile.forEach(traitStr => {
                 const parts = traitStr.split(' ');
                 const level = parts[0].toLowerCase();
@@ -131,21 +161,16 @@
                 }
             });
 
-            // Unique and sorted
             const uniqueIndices = [...new Set(targetIndices)].sort((a, b) => a - b);
-            
-            // 4. Load specific questions
             state.questions = uniqueIndices.map(idx => ({ ...allQuestions[idx], original_index: idx }));
 
             if (state.questions.length === 0) {
-                // Fallback if nothing matched
                 state.questions = allQuestions.slice(0, 10).map((q, i) => ({ ...q, original_index: i }));
             }
 
             renderQuestion();
         } catch (err) {
-            console.error("Initialization failed:", err);
-            elements.questionText.innerText = "Failed to load archive data. Please try again.";
+            elements.questionText.innerText = "An unexpected error occurred. Please try refreshing.";
         }
     }
 
@@ -153,22 +178,18 @@
         const q = state.questions[state.currentIndex];
         if (!q) return;
 
-        // 5. Render dynamic question counter in section header
         elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
         elements.questionNumber.innerText = `Insight ${state.currentIndex + 1}`;
-        elements.questionText.innerText = q.question || q.text;
+        elements.questionText.innerText = q.question;
 
         const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
         elements.progressBar.style.width = `${progress}%`;
 
         elements.optionsContainer.innerHTML = '';
-        
-        // Render options (no default selection)
-        const options = q.options || ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"];
+        const options = q.options || ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"];
         
         options.forEach((opt, idx) => {
             const isSelected = state.answers[state.currentIndex] === idx;
-            
             const btn = document.createElement('button');
             btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
                 isSelected 
@@ -188,11 +209,9 @@
                 state.answers[state.currentIndex] = idx;
                 renderQuestion(); 
             };
-
             elements.optionsContainer.appendChild(btn);
         });
 
-        // UI Updates
         elements.prevBtn.disabled = state.currentIndex === 0;
         elements.nextBtn.disabled = state.answers[state.currentIndex] === undefined;
         
@@ -220,11 +239,10 @@
     }
 
     function saveAndRedirect() {
-        // Capture all responses into final report
         const responses = state.questions.map((q, idx) => ({
             question_index: q.original_index,
-            question_text: q.question || q.text,
-            options_text: q.options || ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"],
+            question_text: q.question,
+            options_text: q.options,
             selected_option: state.answers[idx],
             ground_truth: q.ground_truth !== undefined ? q.ground_truth : null
         }));
@@ -239,11 +257,8 @@
             responses: responses
         };
 
-        // Save to localStorage
         localStorage.setItem('ethereal_archive_report', JSON.stringify(finalReport));
-        // Also save as 'ocean_report' for backwards compatibility with some results screens
         localStorage.setItem('ocean_report', JSON.stringify(finalReport));
-        
         window.location.href = state.resultsPage;
     }
 
