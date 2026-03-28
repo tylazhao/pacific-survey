@@ -8,22 +8,72 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-        tailwind.config = {
-          darkMode: "class",
-          theme: {
-            extend: {
-              colors: {
-                "primary": "#0891B2",
-                "background-light": "#f5f8f8",
-                "background-dark": "#101f22",
-              },
-              fontFamily: {
-                "display": ["Manrope"]
-              },
-              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#c1d8e2",
+              "inverse-surface": "#0b0f11",
+              "on-secondary": "#f1faff",
+              "secondary": "#4d626b",
+              "surface-tint": "#24677b",
+              "tertiary-dim": "#405377",
+              "on-surface-variant": "#576065",
+              "surface-container-highest": "#dbe4e9",
+              "outline-variant": "#aab3b8",
+              "on-secondary-fixed-variant": "#495f68",
+              "error-container": "#fa746f",
+              "secondary-fixed": "#cfe6f1",
+              "surface-variant": "#dbe4e9",
+              "on-primary-fixed": "#003a48",
+              "on-error-container": "#6e0a12",
+              "secondary-container": "#cfe6f1",
+              "on-secondary-fixed": "#2d424b",
+              "primary": "#24677b",
+              "surface-container-high": "#e2e9ed",
+              "inverse-on-surface": "#9a9da0",
+              "on-secondary-container": "#3f555e",
+              "error-dim": "#67040d",
+              "on-tertiary-fixed-variant": "#3b4f73",
+              "on-primary-fixed-variant": "#0d586c",
+              "on-tertiary-container": "#324669",
+              "primary-fixed-dim": "#90cde4",
+              "surface-container-lowest": "#ffffff",
+              "surface-dim": "#d2dbe0",
+              "tertiary-fixed-dim": "#adc1eb",
+              "on-primary-container": "#004e61",
+              "error": "#a83836",
+              "on-background": "#2b3438",
+              "on-tertiary-fixed": "#1e3254",
+              "on-surface": "#2b3438",
+              "primary-fixed": "#9ddbf2",
+              "background": "#f7fafc",
+              "surface-container": "#e8eff3",
+              "primary-container": "#9ddbf2",
+              "surface-container-low": "#eff4f7",
+              "secondary-dim": "#41565f",
+              "primary-dim": "#125a6f",
+              "outline": "#737c80",
+              "surface": "#f7fafc",
+              "on-tertiary": "#f8f8ff",
+              "on-error": "#fff7f6",
+              "tertiary-container": "#bbcffa",
+              "tertiary": "#4c5f84",
+              "inverse-primary": "#9ddbf2",
+              "surface-bright": "#f7fafc",
+              "tertiary-fixed": "#bbcffa",
+              "on-primary": "#f1faff"
             },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
           },
-        }
+        },
+      }
     </script>
 <style>
       .material-symbols-outlined {
@@ -41,7 +91,7 @@
 <body class="bg-surface text-on-surface antialiased min-h-[1024px]" data-mode="connect">
 <nav class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-md">
 <div class="flex justify-center items-center px-8 py-6 max-w-7xl mx-auto">
-<span class="text-2xl font-bold tracking-widest text-cyan-900 dark:text-cyan-100 font-manrope">PACIFIC</span>
+<span class="text-2xl font-bold tracking-widest text-cyan-900 dark:text-cyan-100 font-manrope" style="">PACIFIC</span>
 </div>
 </nav>
 <div class="fixed top-0 left-0 w-full h-2 z-[60] bg-surface-variant">
@@ -49,29 +99,29 @@
 </div>
 <main class="max-w-4xl mx-auto pt-40 pb-24 px-6 lg:px-0">
 <header class="mb-20">
-<h1 class="text-5xl md:text-6xl font-extrabold font-manrope text-on-surface mb-6 tracking-tight">Profile</h1>
-<p class="text-xl text-on-surface-variant max-w-xl font-body leading-relaxed">
-            Input basic information</p>
+<h1 class="text-5xl md:text-6xl font-extrabold font-manrope text-on-surface mb-6 tracking-tight" style="">Profile</h1>
+<p class="text-xl text-on-surface-variant max-w-xl font-body leading-relaxed" style="">
+                Input basic information</p>
 </header>
 <form class="space-y-24" id="profileForm">
 <section>
 <div class="flex flex-col md:flex-row gap-12 items-start">
 <div class="md:w-1/3">
-<h2 class="text-2xl font-bold font-manrope text-primary mb-2">Core Identity</h2>
-<p class="text-sm text-on-surface-variant leading-relaxed">Fundamental Information</p>
+<h2 class="text-2xl font-bold font-manrope text-primary mb-2" style="">Core Identity</h2>
+<p class="text-sm text-on-surface-variant leading-relaxed" style="">Fundamental Information</p>
 </div>
 <div class="md:w-2/3 space-y-8 bg-surface-container-low p-8 rounded-xl ghost-border">
 <div class="flex flex-col gap-2">
-<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant">Full Name *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface placeholder-outline-variant" id="fullName" placeholder="Entry Label" required="" type="text"/>
+<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant" style="">Full Name *</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface placeholder-outline-variant ring-2 ring-error" id="fullName" placeholder="Entry Label" required="" type="text"/>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="flex flex-col gap-2">
-<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant">Age (Optional)</label>
+<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant" style="">Age (Optional)</label>
 <input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface" id="age" placeholder="Years" type="number"/>
 </div>
 <div class="flex flex-col gap-2">
-<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant">Gender (Optional)</label>
+<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant" style="">Gender (Optional)</label>
 <select class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface appearance-none" id="gender">
 <option value="Not Specified">Not Specified</option>
 <option value="Non-binary">Non-binary</option>
@@ -82,8 +132,8 @@
 </div>
 </div>
 <div class="flex flex-col gap-2">
-<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant">Group Number *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface" id="groupNumber" placeholder="Numerical Identifier" required="" type="number"/>
+<label class="text-sm font-semibold tracking-wide uppercase text-on-surface-variant" style="">Group Number * (0-10)</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-6 py-5 focus:ring-2 focus:ring-primary text-on-surface ring-2 ring-error" id="groupNumber" max="10" min="0" placeholder="Numerical Identifier" required="" type="number"/>
 </div>
 </div>
 </div>
@@ -91,63 +141,61 @@
 <section>
 <div class="flex flex-col md:flex-row gap-12 items-start">
 <div class="md:w-1/3">
-<h2 class="text-2xl font-bold font-manrope text-primary mb-2">OCEAN Metrics</h2>
-<p class="text-sm text-on-surface-variant leading-relaxed">Record your psychometric scores from 0 to 100.</p>
+<h2 class="text-2xl font-bold font-manrope text-primary mb-2" style="">OCEAN Metrics</h2>
+<p class="text-sm text-on-surface-variant leading-relaxed" style="">Record your psychometric scores from 0 to 100.</p>
 <div class="mt-8 p-6 bg-primary-container rounded-xl text-on-primary-container text-xs leading-loose">
-<span class="font-bold block mb-2 uppercase tracking-widest text-[10px]">Interpretation Key:</span>
+<span class="font-bold block mb-2 uppercase tracking-widest text-[10px]" style="">Interpretation Key:</span>
 <div class="flex justify-between border-b border-primary/20 pb-1 mb-1">
-<span>&lt; 50</span>
-<span class="font-bold">LOW</span>
+<span class="" style="">&lt; 50</span>
+<span class="font-bold" style="">LOW</span>
 </div>
 <div class="flex justify-between">
-<span>&gt;= 50</span>
-<span class="font-bold">HIGH</span>
+<span class="" style="">&gt;= 50</span>
+<span class="font-bold" style="">HIGH</span>
 </div>
 </div>
 </div>
 <div class="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
-<span class="text-3xl font-black text-primary/20 font-manrope">O</span>
-<label class="text-sm font-bold text-on-surface">Openness *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Openness" id="scoreO" max="100" min="0" required="" type="number"/>
+<span class="text-3xl font-black text-primary/20 font-manrope" style="">O</span>
+<label class="text-sm font-bold text-on-surface" style="">Openness *</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Openness" id="scoreO" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
-<span class="text-3xl font-black text-primary/20 font-manrope">C</span>
-<label class="text-sm font-bold text-on-surface">Conscientious *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Conscientious" id="scoreC" max="100" min="0" required="" type="number"/>
+<span class="text-3xl font-black text-primary/20 font-manrope" style="">C</span>
+<label class="text-sm font-bold text-on-surface" style="">Conscientious *</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Conscientious" id="scoreC" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
-<span class="text-3xl font-black text-primary/20 font-manrope">E</span>
-<label class="text-sm font-bold text-on-surface">Extraversion *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Extraversion" id="scoreE" max="100" min="0" required="" type="number"/>
+<span class="text-3xl font-black text-primary/20 font-manrope" style="">E</span>
+<label class="text-sm font-bold text-on-surface" style="">Extraversion *</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Extraversion" id="scoreE" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
-<span class="text-3xl font-black text-primary/20 font-manrope">A</span>
-<label class="text-sm font-bold text-on-surface">Agreeable *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Agreeable" id="scoreA" max="100" min="0" required="" type="number"/>
+<span class="text-3xl font-black text-primary/20 font-manrope" style="">A</span>
+<label class="text-sm font-bold text-on-surface" style="">Agreeable *</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Agreeable" id="scoreA" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl ghost-border flex flex-col gap-4">
-<span class="text-3xl font-black text-primary/20 font-manrope">N</span>
-<label class="text-sm font-bold text-on-surface">Neuroticism *</label>
-<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input" data-trait="Neuroticism" id="scoreN" max="100" min="0" required="" type="number"/>
+<span class="text-3xl font-black text-primary/20 font-manrope" style="">N</span>
+<label class="text-sm font-bold text-on-surface" style="">Neuroticism *</label>
+<input class="w-full bg-surface-container-highest border-none rounded-xl px-4 py-3 text-center text-lg font-bold text-primary ocean-input ring-2 ring-error" data-trait="Neuroticism" id="scoreN" max="100" min="0" required="" type="number"/>
 </div>
 <div class="bg-surface-container-low rounded-xl flex items-center justify-center p-8 opacity-40">
-<span class="material-symbols-outlined text-4xl" data-icon="psychology_alt">psychology_alt</span>
+<span class="material-symbols-outlined text-4xl" data-icon="psychology_alt" style="">psychology_alt</span>
 </div>
 </div>
 </div>
 </section>
 <div class="pt-12 flex flex-col items-end gap-4">
-<p class="text-red-500 font-medium text-sm hidden" id="errorMessage">Please fill in all required fields marked with *</p>
-<button class="group flex items-center gap-4 bg-primary text-white px-10 py-5 rounded-xl font-bold tracking-widest uppercase text-sm hover:opacity-90 transition-all shadow-lg shadow-primary/10" id="submitBtn" type="button">
-                next sequence <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
-</button>
+<p class="text-error font-medium text-sm" id="errorMessage" style="">Please fill in all required fields and ensure values are within valid ranges.</p>
+<button class="group flex items-center gap-4 bg-primary text-on-primary px-10 py-5 rounded-xl font-bold tracking-widest uppercase text-sm hover:opacity-90 transition-all shadow-lg shadow-primary/10" id="submitBtn" style="" type="button">SURVEY <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span></button>
 </div>
 </form>
 </main>
 <footer class="w-full py-12 mt-24 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/50">
-<div class="flex flex-col md:flex-row justify-between items-center px-12 gap-6 max-w-7xl mx-auto">
-<div class="font-manrope font-black text-cyan-900 dark:text-cyan-100 uppercase tracking-tighter">PACIFIC ARCHIVE</div>
+<div class="flex flex-col md:flex-row justify-start items-center px-12 gap-6 max-w-7xl mx-auto">
+<div class="font-manrope font-black text-cyan-900 dark:text-cyan-100 uppercase tracking-tighter" style="">PACIFIC</div>
 </div>
 </footer>
 <script>
@@ -157,12 +205,33 @@
         const errorMessage = document.getElementById('errorMessage');
         let isValid = true;
 
+        // Reset previous errors
+        form.querySelectorAll('input').forEach(input => input.classList.remove('ring-2', 'ring-error'));
+
+        // Check required fields
         requiredInputs.forEach(input => {
             if (!input.value.trim()) {
                 isValid = false;
-                input.classList.add('ring-2', 'ring-red-500');
-            } else {
-                input.classList.remove('ring-2', 'ring-red-500');
+                input.classList.add('ring-2', 'ring-error');
+            }
+        });
+
+        // Strict Validation: Group Number (0-10)
+        const groupInput = document.getElementById('groupNumber');
+        const groupVal = parseInt(groupInput.value);
+        if (isNaN(groupVal) || groupVal < 0 || groupVal > 10 || !Number.isInteger(groupVal)) {
+            isValid = false;
+            groupInput.classList.add('ring-2', 'ring-error');
+        }
+
+        // Strict Validation: OCEAN scores (0-100)
+        const oceanInputs = ['scoreO', 'scoreC', 'scoreE', 'scoreA', 'scoreN'];
+        oceanInputs.forEach(id => {
+            const input = document.getElementById(id);
+            const val = parseFloat(input.value);
+            if (isNaN(val) || val < 0 || val > 100) {
+                isValid = false;
+                input.classList.add('ring-2', 'ring-error');
             }
         });
 
@@ -174,36 +243,42 @@
 
         errorMessage.classList.add('hidden');
 
-        // Logic to classify scores
-        const getClassification = (score) => (parseInt(score) < 50 ? 'Low' : 'High');
+        const getLevel = (score) => (parseInt(score) < 50 ? 'low' : 'high');
 
-        const oceanScores = {
-            O: { value: document.getElementById('scoreO').value, level: getClassification(document.getElementById('scoreO').value) },
-            C: { value: document.getElementById('scoreC').value, level: getClassification(document.getElementById('scoreC').value) },
-            E: { value: document.getElementById('scoreE').value, level: getClassification(document.getElementById('scoreE').value) },
-            A: { value: document.getElementById('scoreA').value, level: getClassification(document.getElementById('scoreA').value) },
-            N: { value: document.getElementById('scoreN').value, level: getClassification(document.getElementById('scoreN').value) }
+        const oceanScoresData = {
+            O: parseInt(document.getElementById('scoreO').value),
+            C: parseInt(document.getElementById('scoreC').value),
+            E: parseInt(document.getElementById('scoreE').value),
+            A: parseInt(document.getElementById('scoreA').value),
+            N: parseInt(document.getElementById('scoreN').value)
+        };
+
+        const oceanProfileData = {
+            O: getLevel(oceanScoresData.O),
+            C: getLevel(oceanScoresData.C),
+            E: getLevel(oceanScoresData.E),
+            A: getLevel(oceanScoresData.A),
+            N: getLevel(oceanScoresData.N)
         };
 
         const userProfile = {
-            fullName: document.getElementById('fullName').value,
+            name: document.getElementById('fullName').value,
+            group: parseInt(document.getElementById('groupNumber').value),
             age: document.getElementById('age').value || null,
             gender: document.getElementById('gender').value || 'Not Specified',
-            groupNumber: document.getElementById('groupNumber').value,
-            ocean: oceanScores
+            oceanScores: oceanScoresData,
+            oceanProfile: oceanProfileData
         };
 
-        // Save complete user profile
+        // Store primary data
         localStorage.setItem('userProfile', JSON.stringify(userProfile));
         
-        // Save user_ocean_profile as requested for compatibility with survey logic
-        // We calculate a primary trait based on the requirements of the following screens (usually Neuroticism or Extraversion)
+        // Compatibility store for survey page logic
         localStorage.setItem('user_ocean_profile', JSON.stringify({ 
             trait: 'Extraversion', 
-            level: oceanScores.E.level 
+            level: oceanProfileData.E === 'low' ? 'Low' : 'High' 
         }));
 
-        // Redirect to survey page
         window.location.href = "survey.html";
     });
 </script>
