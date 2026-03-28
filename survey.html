@@ -149,8 +149,8 @@
 <span class="material-symbols-outlined">arrow_back</span>
                         Previous
                     </button>
-<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95">
-                        Continue to Next
+<button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95" onclick="completeAnalysis()">
+                        Complete Analysis
                     </button>
 </div>
 </div>
@@ -189,17 +189,24 @@
 <footer class="w-full py-12 border-t border-slate-200/20 dark:border-slate-800/20 bg-slate-100 dark:bg-slate-900 mt-auto">
 <div class="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-8 gap-4">
 <div class="text-lg font-bold text-cyan-900 dark:text-cyan-100 font-manrope">The Ethereal Archive</div>
-<div class="flex gap-8">
-<a class="text-slate-500 dark:text-slate-400 font-inter text-sm hover:text-cyan-600 transition-colors" href="#">Privacy Policy</a>
-<a class="text-slate-500 dark:text-slate-400 font-inter text-sm hover:text-cyan-600 transition-colors" href="#">Terms of Service</a>
-<a class="text-slate-500 dark:text-slate-400 font-inter text-sm hover:text-cyan-600 transition-colors" href="#">Help Center</a>
-</div>
-<div class="text-slate-500 dark:text-slate-400 font-inter text-sm">
-                © 2024 The Ethereal Archive. All rights reserved.
-            </div>
 </div>
 </footer>
 <!-- Decorative Elements -->
 <div class="fixed top-1/4 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-</body></html>
+<script>
+      function completeAnalysis() {
+        // Generate dummy report data
+        const reportData = {
+          timestamp: new Date().toISOString(),
+          status: 'completed',
+          archive_id: 'ETH-' + Math.random().toString(36).substr(2, 9).toUpperCase()
+        };
+        
+        // Save to localStorage
+        localStorage.setItem('ethereal_archive_report', JSON.stringify(reportData));
+        
+        // Redirect to results.html
+        window.location.href = 'results.html';
+      }
+    </script></body></html>

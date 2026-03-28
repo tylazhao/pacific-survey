@@ -8,73 +8,58 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "secondary-fixed-dim": "#c1d8e2",
-              "inverse-surface": "#0b0f11",
-              "on-secondary": "#f1faff",
-              "secondary": "#4d626b",
-              "surface-tint": "#24677b",
-              "tertiary-dim": "#405377",
-              "on-surface-variant": "#576065",
-              "surface-container-highest": "#dbe4e9",
-              "outline-variant": "#aab3b8",
-              "on-secondary-fixed-variant": "#495f68",
-              "error-container": "#fa746f",
-              "secondary-fixed": "#cfe6f1",
-              "surface-variant": "#dbe4e9",
-              "on-primary-fixed": "#003a48",
-              "on-error-container": "#6e0a12",
-              "secondary-container": "#cfe6f1",
-              "on-secondary-fixed": "#2d424b",
-              "primary": "#24677b",
-              "surface-container-high": "#e2e9ed",
-              "inverse-on-surface": "#9a9da0",
-              "on-secondary-container": "#3f555e",
-              "error-dim": "#67040d",
-              "on-tertiary-fixed-variant": "#3b4f73",
-              "on-primary-fixed-variant": "#0d586c",
-              "on-tertiary-container": "#324669",
-              "primary-fixed-dim": "#90cde4",
-              "surface-container-lowest": "#ffffff",
-              "surface-dim": "#d2dbe0",
-              "tertiary-fixed-dim": "#adc1eb",
-              "on-primary-container": "#004e61",
-              "error": "#a83836",
-              "on-background": "#2b3438",
-              "on-tertiary-fixed": "#1e3254",
-              "on-surface": "#2b3438",
-              "primary-fixed": "#9ddbf2",
-              "background": "#f7fafc",
-              "surface-container": "#e8eff3",
-              "primary-container": "#9ddbf2",
-              "surface-container-low": "#eff4f7",
-              "secondary-dim": "#41565f",
-              "primary-dim": "#125a6f",
-              "outline": "#737c80",
-              "surface": "#f7fafc",
-              "on-tertiary": "#f8f8ff",
-              "on-error": "#fff7f6",
-              "tertiary-container": "#bbcffa",
-              "tertiary": "#4c5f84",
-              "inverse-primary": "#9ddbf2",
-              "surface-bright": "#f7fafc",
-              "tertiary-fixed": "#bbcffa",
-              "on-primary": "#f1faff"
-            },
-            fontFamily: {
-              "headline": ["Manrope"],
-              "body": ["Inter"],
-              "label": ["Inter"]
-            },
-            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
-          },
-        },
-      }
-    </script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        const form = document.getElementById('profileForm');
+        const requiredInputs = form.querySelectorAll('[required]');
+        const errorMessage = document.getElementById('errorMessage');
+        let isValid = true;
+
+        requiredInputs.forEach(input => {
+            if (!input.value.trim()) {
+                isValid = false;
+                input.classList.add('ring-2', 'ring-error');
+            } else {
+                input.classList.remove('ring-2', 'ring-error');
+            }
+        });
+
+        if (!isValid) {
+            errorMessage.classList.remove('hidden');
+            window.scrollTo({ top: errorMessage.offsetTop - 200, behavior: 'smooth' });
+            return;
+        }
+
+        errorMessage.classList.add('hidden');
+
+        // Logic to classify scores
+        const getClassification = (score) => (parseInt(score) < 50 ? 'Low' : 'High');
+
+        const oceanScores = {
+            O: { value: document.getElementById('scoreO').value, level: getClassification(document.getElementById('scoreO').value) },
+            C: { value: document.getElementById('scoreC').value, level: getClassification(document.getElementById('scoreC').value) },
+            E: { value: document.getElementById('scoreE').value, level: getClassification(document.getElementById('scoreE').value) },
+            A: { value: document.getElementById('scoreA').value, level: getClassification(document.getElementById('scoreA').value) },
+            N: { value: document.getElementById('scoreN').value, level: getClassification(document.getElementById('scoreN').value) }
+        };
+
+        const userProfile = {
+            fullName: document.getElementById('fullName').value,
+            age: document.getElementById('age').value || null,
+            gender: document.getElementById('gender').value || 'Not Specified',
+            groupNumber: document.getElementById('groupNumber').value,
+            ocean: oceanScores,
+            // Additional field to support Screen 2's specific requirement for a 'trait' and 'level' key
+            // We'll pick the first trait as primary for the survey logic, or just store the full object
+            primaryTrait: { trait: 'Extraversion', level: oceanScores.E.level } 
+        };
+
+        localStorage.setItem('userProfile', JSON.stringify(userProfile));
+        // Compatibility with Screen 2's expected key
+        localStorage.setItem('user_ocean_profile', JSON.stringify({ trait: 'Extraversion', level: oceanScores.E.level }));
+
+        window.location.href = 'survey.html';
+    });
+</script>
 <style>
       .material-symbols-outlined {
         font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -198,14 +183,6 @@
 <footer class="w-full py-12 mt-24 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800/50">
 <div class="flex flex-col md:flex-row justify-between items-center px-12 gap-6 max-w-7xl mx-auto">
 <div class="font-manrope font-black text-cyan-900 dark:text-cyan-100 uppercase tracking-tighter">PACIFIC ARCHIVE</div>
-<div class="flex gap-8 font-inter text-xs tracking-widest uppercase">
-<a class="text-slate-400 dark:text-slate-600 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors" href="#">Privacy Policy</a>
-<a class="text-slate-400 dark:text-slate-600 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors" href="#">Terms of Service</a>
-<a class="text-slate-400 dark:text-slate-600 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors" href="#">Accessibility</a>
-</div>
-<div class="font-inter text-xs tracking-widest uppercase text-slate-400 dark:text-slate-600">
-                © 2024 PACIFIC ARCHIVE. ALL RIGHTS RESERVED.
-            </div>
 </div>
 </footer>
 <script>
@@ -258,7 +235,7 @@
         // Compatibility with Screen 2's expected key
         localStorage.setItem('user_ocean_profile', JSON.stringify({ trait: 'Extraversion', level: oceanScores.E.level }));
 
-        window.location.href = '{{DATA:SCREEN:SCREEN_2}}';
+        window.location.href = 'survey.html';
     });
 </script>
 </body></html>
