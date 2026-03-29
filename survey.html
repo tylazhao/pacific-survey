@@ -4,221 +4,229 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>The Ethereal Archive | Insight Collection</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">    const state = {
-        questions: [],
-        currentIndex: 0,
-        answers: {},
-        reflections: {},
-        userProfile: null,
-        resultsPage: 'results.html'
-    };
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">const state = {
+    questions: [],
+    currentIndex: 0,
+    answers: {},
+    reflections: {},
+    userProfile: null,
+    resultsPage: 'results.html'
+};
 
-    const elements = {
-        progressBar: document.getElementById('progress-bar'),
-        sectionLabel: document.getElementById('section-label'),
-        preferenceText: document.getElementById('preference-text'),
-        questionNumber: document.getElementById('question-number'),
-        questionText: document.getElementById('question-text'),
-        optionsContainer: document.getElementById('options-container'),
-        prevBtn: document.getElementById('prev-btn'),
-        nextBtn: document.getElementById('next-btn'),
-        nextBtnText: document.getElementById('next-btn-text'),
-        reflectionYes: document.getElementById('reflection-yes'),
-        reflectionNo: document.getElementById('reflection-no')
-    };
+const elements = {
+    progressBar: document.getElementById('progress-bar'),
+    sectionLabel: document.getElementById('section-label'),
+    preferenceText: document.getElementById('preference-text'),
+    questionNumber: document.getElementById('question-number'),
+    questionText: document.getElementById('question-text'),
+    optionsContainer: document.getElementById('options-container'),
+    prevBtn: document.getElementById('prev-btn'),
+    nextBtn: document.getElementById('next-btn'),
+    nextBtnText: document.getElementById('next-btn-text'),
+    reflectionYes: document.getElementById('reflection-yes'),
+    reflectionNo: document.getElementById('reflection-no')
+};
 
-    async function init() {
-        try {
-            const profileStr = localStorage.getItem('userProfile');
-            
-            if (!profileStr) {
-                const errorMsg = "Error: User profile missing from storage. Please restart the analysis.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-            
-            try {
-                state.userProfile = JSON.parse(profileStr);
-            } catch (e) {
-                const errorMsg = "Error: Failed to parse user profile data.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-
-            const { oceanProfile } = state.userProfile;
-            if (!oceanProfile) {
-                const errorMsg = "Error: Ocean profile traits are missing from your user data.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-
-            const fetchData = async (url) => {
-                const res = await fetch(url);
-                if (!res.ok) throw new Error(`HTTP ${res.status} at ${url}`);
-                return res;
-            };
-
-            let dataRaw, dict;
-            try {
-                const [resData, resDict] = await Promise.all([
-                    fetchData('./data_sample.jsonl'),
-                    fetchData('./dict.json')
-                ]);
-                dataRaw = await resData.text();
-                dict = await resDict.json();
-            } catch (err) {
-                const errorMsg = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-
-            let allQuestions;
-            try {
-                allQuestions = dataRaw.trim().split('\n')
-                    .filter(line => line.trim().length > 0)
-                    .map(line => JSON.parse(line));
-            } catch (err) {
-                const errorMsg = "Error: The archive data format (JSONL) is invalid.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-            
-            let targetIndices = [];
-            const traits = ['O', 'C', 'E', 'A', 'N'];
-
-            traits.forEach(traitKey => {
-                const label = oceanProfile[traitKey];
-                if (label && dict[traitKey] && dict[traitKey][label]) {
-                    const traitIndices = dict[traitKey][label];
-                    targetIndices = [...targetIndices, ...traitIndices];
-                }
-            });
-
-            state.questions = targetIndices.map(idx => {
-                const q = allQuestions[idx];
-                return { 
-                    ...q, 
-                    original_index: idx 
-                };
-            });
-
-            if (state.questions.length === 0) {
-                state.questions = allQuestions.slice(0, 25).map((q, i) => ({ ...q, original_index: i }));
-            }
-
-            renderQuestion();
-        } catch (err) {
-            console.error('Initialization error:', err);
-            elements.questionText.innerText = `An unexpected error occurred: ${err.message}`;
-        }
-    }
-
-    function renderQuestion() {
-        const q = state.questions[state.currentIndex];
-        if (!q) return;
-
-        elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
-        elements.preferenceText.innerText = q.preference || "No preference data available";
-        elements.questionNumber.innerText = `(Q ${q.original_index})`;
-        elements.questionText.innerText = q.question;
-
-        const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
-        elements.progressBar.style.width = `${progress}%`;
-
-        elements.optionsContainer.innerHTML = '';
-        const options = q.options || ["Option 1", "Option 2", "Option 3", "Option 4"];
+async function init() {
+    try {
+        const profileStr = localStorage.getItem('userProfile');
         
-        options.forEach((opt, idx) => {
-            const isSelected = state.answers[state.currentIndex] === idx;
-            const btn = document.createElement('button');
-            
-            btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
-                isSelected 
-                ? 'bg-primary-container text-on-primary-container ring-2 ring-primary border-transparent' 
-                : 'bg-surface-container-low hover:bg-primary-container/30 border-transparent hover:border-primary/20'
-            }`;
-            
-            const iconName = isSelected ? 'check_circle' : 'radio_button_unchecked';
-            const iconColor = isSelected ? 'text-primary' : 'text-outline group-hover:text-primary';
-            const fillSetting = isSelected ? "'FILL' 1" : "'FILL' 0";
+        if (!profileStr) {
+            const errorMsg = "Error: User profile missing from storage. Please restart the analysis.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
+        
+        try {
+            state.userProfile = JSON.parse(profileStr);
+        } catch (e) {
+            const errorMsg = "Error: Failed to parse user profile data.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
 
-            btn.innerHTML = `
-                <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
-<span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
-                    ${iconName}
-                </span>
-            `;
+        const { oceanProfile } = state.userProfile;
+        if (!oceanProfile) {
+            const errorMsg = "Error: Ocean profile traits are missing from your user data.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
 
-            btn.onclick = () => {
-                state.answers[state.currentIndex] = idx;
-                renderQuestion(); 
-            };
-            elements.optionsContainer.appendChild(btn);
+        const fetchData = async (url) => {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status} at ${url}`);
+            return res;
+        };
+
+        let dataRaw, dict;
+        try {
+            const [resData, resDict] = await Promise.all([
+                fetchData('./data_sample.jsonl'),
+                fetchData('./dict.json')
+            ]);
+            dataRaw = await resData.text();
+            dict = await resDict.json();
+        } catch (err) {
+            const errorMsg = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
+
+        let allQuestions;
+        try {
+            allQuestions = dataRaw.trim().split('\n')
+                .filter(line => line.trim().length > 0)
+                .map(line => JSON.parse(line));
+        } catch (err) {
+            const errorMsg = "Error: The archive data format (JSONL) is invalid.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
+        
+        let targetIndices = [];
+        const traits = ['O', 'C', 'E', 'A', 'N'];
+
+        traits.forEach(traitKey => {
+            const label = oceanProfile[traitKey];
+            if (label && dict[traitKey] && dict[traitKey][label]) {
+                const traitIndices = dict[traitKey][label];
+                targetIndices = [...targetIndices, ...traitIndices];
+            }
         });
 
-        const currentReflection = state.reflections[state.currentIndex];
-        const baseClass = "flex-1 py-3 px-6 rounded-xl border-2 transition-all font-medium text-on-surface-variant flex items-center justify-center gap-2";
-        
-        elements.reflectionYes.className = `${baseClass} ${currentReflection === true ? 'bg-primary/10 border-primary text-primary' : 'border-outline/20'}`;
-        elements.reflectionNo.className = `${baseClass} ${currentReflection === false ? 'bg-error/10 border-error text-error' : 'border-outline/20'}`;
+        state.questions = targetIndices.map(idx => {
+            const q = allQuestions[idx];
+            return { 
+                ...q, 
+                original_index: idx 
+            };
+        });
 
-        elements.prevBtn.disabled = state.currentIndex === 0;
-        
-        const isOptionAnswered = state.answers[state.currentIndex] !== undefined;
-        const isReflectionAnswered = state.reflections[state.currentIndex] !== undefined;
-        elements.nextBtn.disabled = !isOptionAnswered || !isReflectionAnswered;
-        
-        if (state.currentIndex === state.questions.length - 1) {
-            elements.nextBtnText.innerText = "Complete Analysis";
-        } else {
-            elements.nextBtnText.innerText = "Continue to Next";
+        if (state.questions.length === 0) {
+            state.questions = allQuestions.slice(0, 25).map((q, i) => ({ ...q, original_index: i }));
         }
-    }
 
-    function setReflection(val) {
-        state.reflections[state.currentIndex] = val;
+        renderQuestion();
+    } catch (err) {
+        console.error('Initialization error:', err);
+        elements.questionText.innerText = `An unexpected error occurred: ${err.message}`;
+    }
+}
+
+function renderQuestion() {
+    const q = state.questions[state.currentIndex];
+    if (!q) return;
+
+    elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
+    elements.preferenceText.innerText = q.preference || "No preference data available";
+    elements.questionNumber.innerText = `(Q ${q.original_index})`;
+    elements.questionText.innerText = q.question;
+
+    const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
+    elements.progressBar.style.width = `${progress}%`;
+
+    elements.optionsContainer.innerHTML = '';
+    const options = q.options || ["Option 1", "Option 2", "Option 3", "Option 4"];
+    
+    options.forEach((opt, idx) => {
+        const isSelected = state.answers[state.currentIndex] === idx;
+        const btn = document.createElement('button');
+        
+        btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
+            isSelected 
+            ? 'bg-primary-container text-on-primary-container ring-2 ring-primary border-transparent' 
+            : 'bg-surface-container-low hover:bg-primary-container/30 border-transparent hover:border-primary/20'
+        }`;
+        
+        const iconName = isSelected ? 'check_circle' : 'radio_button_unchecked';
+        const iconColor = isSelected ? 'text-primary' : 'text-outline group-hover:text-primary';
+        const fillSetting = isSelected ? "'FILL' 1" : "'FILL' 0";
+
+        btn.innerHTML = `
+            <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
+<span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
+                ${iconName}
+            </span>
+        `;
+
+        btn.onclick = () => {
+            state.answers[state.currentIndex] = idx;
+            renderQuestion(); 
+        };
+        elements.optionsContainer.appendChild(btn);
+    });
+
+    const currentReflection = state.reflections[state.currentIndex];
+    const baseClass = "flex-1 py-3 px-6 rounded-xl border-2 transition-all font-medium flex items-center justify-center gap-2";
+    const activeClass = "bg-cyan-50 border-cyan-700 text-cyan-900 shadow-sm";
+    const inactiveClass = "border-outline/20 text-on-surface-variant";
+    
+    elements.reflectionYes.className = `${baseClass} ${currentReflection === true ? activeClass : inactiveClass}`;
+    elements.reflectionNo.className = `${baseClass} ${currentReflection === false ? activeClass : inactiveClass}`;
+
+    elements.prevBtn.disabled = state.currentIndex === 0;
+    
+    const isOptionAnswered = state.answers[state.currentIndex] !== undefined;
+    const isReflectionAnswered = state.reflections[state.currentIndex] !== undefined;
+    elements.nextBtn.disabled = !isOptionAnswered || !isReflectionAnswered;
+    
+    if (state.currentIndex === state.questions.length - 1) {
+        elements.nextBtnText.innerText = "Complete Analysis";
+    } else {
+        elements.nextBtnText.innerText = "Continue to Next";
+    }
+}
+
+function setReflection(val) {
+    state.reflections[state.currentIndex] = val;
+    renderQuestion();
+}
+
+function handleNext() {
+    if (state.currentIndex === state.questions.length - 1) {
+        saveAndRedirect();
+    } else {
+        state.currentIndex++;
         renderQuestion();
     }
+}
 
-    function handleNext() {
-        if (state.currentIndex === state.questions.length - 1) {
-            saveAndRedirect();
-        } else {
-            state.currentIndex++;
-            renderQuestion();
-        }
+function handlePrev() {
+    if (state.currentIndex > 0) {
+        state.currentIndex--;
+        renderQuestion();
     }
+}
 
-    function handlePrev() {
-        if (state.currentIndex > 0) {
-            state.currentIndex--;
-            renderQuestion();
-        }
-    }
+function saveAndRedirect() {
+    const responses = state.questions.map((q, idx) => {
+        let aligned = null;
+        if (state.reflections[idx] === true) aligned = true;
+        if (state.reflections[idx] === false) aligned = false;
 
-    function saveAndRedirect() {
-        const responses = state.questions.map((q, idx) => ({
+        return {
             question_index: q.original_index,
             selected_option: state.answers[idx] !== undefined ? state.answers[idx] : null,
             ground_truth: q.ground_truth_choice_id !== undefined ? q.ground_truth_choice_id : null,
-            aligned: state.reflections[idx] !== undefined ? state.reflections[idx] : null
-        }));
-
-        const finalReport = {
-            user_name: state.userProfile.name || "Ethereal Voyager",
-            group_number: state.userProfile.group || 1,
-            ocean_score: state.userProfile.oceanScores,
-            ocean_profile: state.userProfile.oceanProfile,
-            timestamp: new Date().toISOString(),
-            status: 'completed',
-            responses: responses
+            aligned: aligned
         };
+    });
 
-        localStorage.setItem('ocean_report', JSON.stringify(finalReport));
-        window.location.href = state.resultsPage;
-    }
+    const finalReport = {
+        user_name: state.userProfile.name || "Ethereal Voyager",
+        group_number: state.userProfile.group || 1,
+        ocean_score: state.userProfile.oceanScores,
+        ocean_profile: state.userProfile.oceanProfile,
+        timestamp: new Date().toISOString(),
+        status: 'completed',
+        responses: responses
+    };
 
-    init();</script>
+    localStorage.setItem('ocean_report', JSON.stringify(finalReport));
+    window.location.href = state.resultsPage;
+}
+
+init();</script>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <style>
@@ -244,8 +252,8 @@
 <header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md">
 <nav class="flex justify-center items-center w-full px-8 py-6">
 <div class="text-2xl font-bold text-cyan-900 dark:text-cyan-100 uppercase tracking-widest font-manrope">
-            PACIFIC
-        </div>
+                PACIFIC
+            </div>
 </nav>
 </header>
 <!-- Progress Monolith -->
@@ -276,24 +284,24 @@
 </div>
 <!-- Reflection Question Section -->
 <div class="pt-8 border-t border-slate-200/50 dark:border-slate-800/50 space-y-4">
-<p class="text-lg font-semibold text-on-surface">Do you think this preference in general reflects your personality?</p>
+<p class="text-lg font-semibold text-on-surface">While it may not perfectly describe every situation, do you generally lean toward this type of preference?</p>
 <div class="flex gap-4">
 <button class="flex-1 py-3 px-6 rounded-xl border-2 border-outline/20 hover:border-primary/50 transition-all font-medium text-on-surface-variant flex items-center justify-center gap-2" id="reflection-yes" onclick="setReflection(true)">
 <span class="material-symbols-outlined">thumb_up</span>
-                        Yes
-                    </button>
+                            Yes
+                        </button>
 <button class="flex-1 py-3 px-6 rounded-xl border-2 border-outline/20 hover:border-primary/50 transition-all font-medium text-on-surface-variant flex items-center justify-center gap-2" id="reflection-no" onclick="setReflection(false)">
 <span class="material-symbols-outlined">thumb_down</span>
-                        No
-                    </button>
+                            No
+                        </button>
 </div>
 </div>
 <!-- Action Bar -->
 <div class="flex items-center justify-between pt-8">
 <button class="flex items-center gap-2 text-on-surface-variant hover:text-primary transition-colors font-medium disabled:opacity-30 disabled:cursor-not-allowed" id="prev-btn" onclick="handlePrev()">
 <span class="material-symbols-outlined">arrow_back</span>
-                    Previous
-                </button>
+                        Previous
+                    </button>
 <button class="px-10 py-4 bg-primary text-on-primary rounded-xl font-bold text-lg hover:bg-primary-dim transition-all shadow-lg shadow-primary/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed" disabled="" id="next-btn" onclick="handleNext()">
 <span id="next-btn-text">Continue to Next</span>
 </button>
@@ -310,219 +318,227 @@
 <!-- Decorative Elements -->
 <div class="fixed top-1/4 -right-24 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10 pointer-events-none"></div>
 <div class="fixed bottom-1/4 -left-24 w-96 h-96 bg-secondary-container/10 rounded-full blur-3xl -z-10 pointer-events-none"></div>
-<script>    const state = {
-        questions: [],
-        currentIndex: 0,
-        answers: {},
-        reflections: {},
-        userProfile: null,
-        resultsPage: 'results.html'
-    };
+<script>const state = {
+    questions: [],
+    currentIndex: 0,
+    answers: {},
+    reflections: {},
+    userProfile: null,
+    resultsPage: 'results.html'
+};
 
-    const elements = {
-        progressBar: document.getElementById('progress-bar'),
-        sectionLabel: document.getElementById('section-label'),
-        preferenceText: document.getElementById('preference-text'),
-        questionNumber: document.getElementById('question-number'),
-        questionText: document.getElementById('question-text'),
-        optionsContainer: document.getElementById('options-container'),
-        prevBtn: document.getElementById('prev-btn'),
-        nextBtn: document.getElementById('next-btn'),
-        nextBtnText: document.getElementById('next-btn-text'),
-        reflectionYes: document.getElementById('reflection-yes'),
-        reflectionNo: document.getElementById('reflection-no')
-    };
+const elements = {
+    progressBar: document.getElementById('progress-bar'),
+    sectionLabel: document.getElementById('section-label'),
+    preferenceText: document.getElementById('preference-text'),
+    questionNumber: document.getElementById('question-number'),
+    questionText: document.getElementById('question-text'),
+    optionsContainer: document.getElementById('options-container'),
+    prevBtn: document.getElementById('prev-btn'),
+    nextBtn: document.getElementById('next-btn'),
+    nextBtnText: document.getElementById('next-btn-text'),
+    reflectionYes: document.getElementById('reflection-yes'),
+    reflectionNo: document.getElementById('reflection-no')
+};
 
-    async function init() {
-        try {
-            const profileStr = localStorage.getItem('userProfile');
-            
-            if (!profileStr) {
-                const errorMsg = "Error: User profile missing from storage. Please restart the analysis.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-            
-            try {
-                state.userProfile = JSON.parse(profileStr);
-            } catch (e) {
-                const errorMsg = "Error: Failed to parse user profile data.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-
-            const { oceanProfile } = state.userProfile;
-            if (!oceanProfile) {
-                const errorMsg = "Error: Ocean profile traits are missing from your user data.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-
-            const fetchData = async (url) => {
-                const res = await fetch(url);
-                if (!res.ok) throw new Error(`HTTP ${res.status} at ${url}`);
-                return res;
-            };
-
-            let dataRaw, dict;
-            try {
-                const [resData, resDict] = await Promise.all([
-                    fetchData('./data_sample.jsonl'),
-                    fetchData('./dict.json')
-                ]);
-                dataRaw = await resData.text();
-                dict = await resDict.json();
-            } catch (err) {
-                const errorMsg = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-
-            let allQuestions;
-            try {
-                allQuestions = dataRaw.trim().split('\n')
-                    .filter(line => line.trim().length > 0)
-                    .map(line => JSON.parse(line));
-            } catch (err) {
-                const errorMsg = "Error: The archive data format (JSONL) is invalid.";
-                elements.questionText.innerText = errorMsg;
-                return;
-            }
-            
-            let targetIndices = [];
-            const traits = ['O', 'C', 'E', 'A', 'N'];
-
-            traits.forEach(traitKey => {
-                const label = oceanProfile[traitKey];
-                if (label && dict[traitKey] && dict[traitKey][label]) {
-                    const traitIndices = dict[traitKey][label];
-                    targetIndices = [...targetIndices, ...traitIndices];
-                }
-            });
-
-            state.questions = targetIndices.map(idx => {
-                const q = allQuestions[idx];
-                return { 
-                    ...q, 
-                    original_index: idx 
-                };
-            });
-
-            if (state.questions.length === 0) {
-                state.questions = allQuestions.slice(0, 25).map((q, i) => ({ ...q, original_index: i }));
-            }
-
-            renderQuestion();
-        } catch (err) {
-            console.error('Initialization error:', err);
-            elements.questionText.innerText = `An unexpected error occurred: ${err.message}`;
-        }
-    }
-
-    function renderQuestion() {
-        const q = state.questions[state.currentIndex];
-        if (!q) return;
-
-        elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
-        elements.preferenceText.innerText = q.preference || "No preference data available";
-        elements.questionNumber.innerText = `(Q ${q.original_index})`;
-        elements.questionText.innerText = q.question;
-
-        const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
-        elements.progressBar.style.width = `${progress}%`;
-
-        elements.optionsContainer.innerHTML = '';
-        const options = q.options || ["Option 1", "Option 2", "Option 3", "Option 4"];
+async function init() {
+    try {
+        const profileStr = localStorage.getItem('userProfile');
         
-        options.forEach((opt, idx) => {
-            const isSelected = state.answers[state.currentIndex] === idx;
-            const btn = document.createElement('button');
-            
-            btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
-                isSelected 
-                ? 'bg-primary-container text-on-primary-container ring-2 ring-primary border-transparent' 
-                : 'bg-surface-container-low hover:bg-primary-container/30 border-transparent hover:border-primary/20'
-            }`;
-            
-            const iconName = isSelected ? 'check_circle' : 'radio_button_unchecked';
-            const iconColor = isSelected ? 'text-primary' : 'text-outline group-hover:text-primary';
-            const fillSetting = isSelected ? "'FILL' 1" : "'FILL' 0";
+        if (!profileStr) {
+            const errorMsg = "Error: User profile missing from storage. Please restart the analysis.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
+        
+        try {
+            state.userProfile = JSON.parse(profileStr);
+        } catch (e) {
+            const errorMsg = "Error: Failed to parse user profile data.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
 
-            btn.innerHTML = `
-                <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
-<span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
-                    ${iconName}
-                </span>
-            `;
+        const { oceanProfile } = state.userProfile;
+        if (!oceanProfile) {
+            const errorMsg = "Error: Ocean profile traits are missing from your user data.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
 
-            btn.onclick = () => {
-                state.answers[state.currentIndex] = idx;
-                renderQuestion(); 
-            };
-            elements.optionsContainer.appendChild(btn);
+        const fetchData = async (url) => {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP ${res.status} at ${url}`);
+            return res;
+        };
+
+        let dataRaw, dict;
+        try {
+            const [resData, resDict] = await Promise.all([
+                fetchData('./data_sample.jsonl'),
+                fetchData('./dict.json')
+            ]);
+            dataRaw = await resData.text();
+            dict = await resDict.json();
+        } catch (err) {
+            const errorMsg = `Data Fetch Error: ${err.message}. Please ensure dict.json and data_sample.jsonl are available.`;
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
+
+        let allQuestions;
+        try {
+            allQuestions = dataRaw.trim().split('\n')
+                .filter(line => line.trim().length > 0)
+                .map(line => JSON.parse(line));
+        } catch (err) {
+            const errorMsg = "Error: The archive data format (JSONL) is invalid.";
+            elements.questionText.innerText = errorMsg;
+            return;
+        }
+        
+        let targetIndices = [];
+        const traits = ['O', 'C', 'E', 'A', 'N'];
+
+        traits.forEach(traitKey => {
+            const label = oceanProfile[traitKey];
+            if (label && dict[traitKey] && dict[traitKey][label]) {
+                const traitIndices = dict[traitKey][label];
+                targetIndices = [...targetIndices, ...traitIndices];
+            }
         });
 
-        const currentReflection = state.reflections[state.currentIndex];
-        const baseClass = "flex-1 py-3 px-6 rounded-xl border-2 transition-all font-medium text-on-surface-variant flex items-center justify-center gap-2";
-        
-        elements.reflectionYes.className = `${baseClass} ${currentReflection === true ? 'bg-primary/10 border-primary text-primary' : 'border-outline/20'}`;
-        elements.reflectionNo.className = `${baseClass} ${currentReflection === false ? 'bg-error/10 border-error text-error' : 'border-outline/20'}`;
+        state.questions = targetIndices.map(idx => {
+            const q = allQuestions[idx];
+            return { 
+                ...q, 
+                original_index: idx 
+            };
+        });
 
-        elements.prevBtn.disabled = state.currentIndex === 0;
-        
-        const isOptionAnswered = state.answers[state.currentIndex] !== undefined;
-        const isReflectionAnswered = state.reflections[state.currentIndex] !== undefined;
-        elements.nextBtn.disabled = !isOptionAnswered || !isReflectionAnswered;
-        
-        if (state.currentIndex === state.questions.length - 1) {
-            elements.nextBtnText.innerText = "Complete Analysis";
-        } else {
-            elements.nextBtnText.innerText = "Continue to Next";
+        if (state.questions.length === 0) {
+            state.questions = allQuestions.slice(0, 25).map((q, i) => ({ ...q, original_index: i }));
         }
-    }
 
-    function setReflection(val) {
-        state.reflections[state.currentIndex] = val;
+        renderQuestion();
+    } catch (err) {
+        console.error('Initialization error:', err);
+        elements.questionText.innerText = `An unexpected error occurred: ${err.message}`;
+    }
+}
+
+function renderQuestion() {
+    const q = state.questions[state.currentIndex];
+    if (!q) return;
+
+    elements.sectionLabel.innerText = `Question ${state.currentIndex + 1}/${state.questions.length}`;
+    elements.preferenceText.innerText = q.preference || "No preference data available";
+    elements.questionNumber.innerText = `(Q ${q.original_index})`;
+    elements.questionText.innerText = q.question;
+
+    const progress = ((state.currentIndex + 1) / state.questions.length) * 100;
+    elements.progressBar.style.width = `${progress}%`;
+
+    elements.optionsContainer.innerHTML = '';
+    const options = q.options || ["Option 1", "Option 2", "Option 3", "Option 4"];
+    
+    options.forEach((opt, idx) => {
+        const isSelected = state.answers[state.currentIndex] === idx;
+        const btn = document.createElement('button');
+        
+        btn.className = `group flex items-center justify-between p-6 transition-all duration-300 rounded-xl text-left border ${
+            isSelected 
+            ? 'bg-primary-container text-on-primary-container ring-2 ring-primary border-transparent' 
+            : 'bg-surface-container-low hover:bg-primary-container/30 border-transparent hover:border-primary/20'
+        }`;
+        
+        const iconName = isSelected ? 'check_circle' : 'radio_button_unchecked';
+        const iconColor = isSelected ? 'text-primary' : 'text-outline group-hover:text-primary';
+        const fillSetting = isSelected ? "'FILL' 1" : "'FILL' 0";
+
+        btn.innerHTML = `
+            <span class="text-lg font-medium ${isSelected ? '' : 'text-on-surface'}">${opt}</span>
+<span class="material-symbols-outlined ${iconColor}" style="font-variation-settings: ${fillSetting}">
+                ${iconName}
+            </span>
+        `;
+
+        btn.onclick = () => {
+            state.answers[state.currentIndex] = idx;
+            renderQuestion(); 
+        };
+        elements.optionsContainer.appendChild(btn);
+    });
+
+    const currentReflection = state.reflections[state.currentIndex];
+    const baseClass = "flex-1 py-3 px-6 rounded-xl border-2 transition-all font-medium flex items-center justify-center gap-2";
+    const activeClass = "bg-cyan-50 border-cyan-700 text-cyan-900 shadow-sm";
+    const inactiveClass = "border-outline/20 text-on-surface-variant";
+    
+    elements.reflectionYes.className = `${baseClass} ${currentReflection === true ? activeClass : inactiveClass}`;
+    elements.reflectionNo.className = `${baseClass} ${currentReflection === false ? activeClass : inactiveClass}`;
+
+    elements.prevBtn.disabled = state.currentIndex === 0;
+    
+    const isOptionAnswered = state.answers[state.currentIndex] !== undefined;
+    const isReflectionAnswered = state.reflections[state.currentIndex] !== undefined;
+    elements.nextBtn.disabled = !isOptionAnswered || !isReflectionAnswered;
+    
+    if (state.currentIndex === state.questions.length - 1) {
+        elements.nextBtnText.innerText = "Complete Analysis";
+    } else {
+        elements.nextBtnText.innerText = "Continue to Next";
+    }
+}
+
+function setReflection(val) {
+    state.reflections[state.currentIndex] = val;
+    renderQuestion();
+}
+
+function handleNext() {
+    if (state.currentIndex === state.questions.length - 1) {
+        saveAndRedirect();
+    } else {
+        state.currentIndex++;
         renderQuestion();
     }
+}
 
-    function handleNext() {
-        if (state.currentIndex === state.questions.length - 1) {
-            saveAndRedirect();
-        } else {
-            state.currentIndex++;
-            renderQuestion();
-        }
+function handlePrev() {
+    if (state.currentIndex > 0) {
+        state.currentIndex--;
+        renderQuestion();
     }
+}
 
-    function handlePrev() {
-        if (state.currentIndex > 0) {
-            state.currentIndex--;
-            renderQuestion();
-        }
-    }
+function saveAndRedirect() {
+    const responses = state.questions.map((q, idx) => {
+        let aligned = null;
+        if (state.reflections[idx] === true) aligned = true;
+        if (state.reflections[idx] === false) aligned = false;
 
-    function saveAndRedirect() {
-        const responses = state.questions.map((q, idx) => ({
+        return {
             question_index: q.original_index,
             selected_option: state.answers[idx] !== undefined ? state.answers[idx] : null,
             ground_truth: q.ground_truth_choice_id !== undefined ? q.ground_truth_choice_id : null,
-            aligned: state.reflections[idx] !== undefined ? state.reflections[idx] : null
-        }));
-
-        const finalReport = {
-            user_name: state.userProfile.name || "Ethereal Voyager",
-            group_number: state.userProfile.group || 1,
-            ocean_score: state.userProfile.oceanScores,
-            ocean_profile: state.userProfile.oceanProfile,
-            timestamp: new Date().toISOString(),
-            status: 'completed',
-            responses: responses
+            aligned: aligned
         };
+    });
 
-        localStorage.setItem('ocean_report', JSON.stringify(finalReport));
-        window.location.href = state.resultsPage;
-    }
+    const finalReport = {
+        user_name: state.userProfile.name || "Ethereal Voyager",
+        group_number: state.userProfile.group || 1,
+        ocean_score: state.userProfile.oceanScores,
+        ocean_profile: state.userProfile.oceanProfile,
+        timestamp: new Date().toISOString(),
+        status: 'completed',
+        responses: responses
+    };
 
-    init();</script>
+    localStorage.setItem('ocean_report', JSON.stringify(finalReport));
+    window.location.href = state.resultsPage;
+}
+
+init();</script>
 </body></html>
